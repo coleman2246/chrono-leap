@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.cloudedmountain.ide.neovim": {
+      "version": "https://github.com/coleman2246/com.coleman2246.ide.neovim.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "adf0bee7e8890761a0bdb202fe0cb5958e4f9640"
+    },
     "com.unity.collab-proxy": {
       "version": "2.0.1",
       "depth": 0,
