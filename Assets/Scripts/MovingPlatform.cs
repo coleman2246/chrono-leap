@@ -24,7 +24,6 @@ struct MovingPlatformTracking
 
 public class MovingPlatform : TimeEffectedObject
 {
-    
 
     [SerializeField] private Transform endTransform;
     [SerializeField] private float periodTime = 1f;
@@ -124,8 +123,6 @@ public class MovingPlatform : TimeEffectedObject
         MovingPlatformTracking newState = (MovingPlatformTracking) platformStateTracker.Last.Value;
         movingState = newState.movingState;
         timeInState = newState.timeInState;
-        Debug.Log("In endcallback");
-    
     }
 
     

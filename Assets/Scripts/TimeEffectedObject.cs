@@ -307,6 +307,4 @@ public class TimeEffectedObject : MonoBehaviour
 
     public virtual void TimeStepCallback(){}
 
-
-
 }
