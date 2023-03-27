@@ -71,7 +71,7 @@ public struct CommonTracking
 public class TimeEffectedObject : MonoBehaviour
 {
 
-    [SerializeField] private bool isPaused = false;
+    [SerializeField] public bool isPaused = false;
     [SerializeField] private bool pauseTest = false;
     [SerializeField] private bool rewindTest = false;
     [SerializeField] private float rewindLength = 5f; // in secs
@@ -109,7 +109,7 @@ public class TimeEffectedObject : MonoBehaviour
         }
         else
         {
-            UnPause();
+            //UnPause();
         }
 
         if(rewindTest)
@@ -220,7 +220,7 @@ public class TimeEffectedObject : MonoBehaviour
         AnimateRewind();
     }
 
-    public async Task AnimateRewind()
+    public async void AnimateRewind()
     {
         int waitTime = Mathf.CeilToInt( (this.playBackSpeed / commonTracking.Count) ); // units are ms
 
@@ -260,6 +260,7 @@ public class TimeEffectedObject : MonoBehaviour
 
             done = true;
 
+            int index  = 0;
             foreach(bool currCheck in doneAll)
             {
                 done = done && currCheck; 
@@ -269,13 +270,14 @@ public class TimeEffectedObject : MonoBehaviour
         if(commonTracking.Count > 0)
         {
 
-            commonTracking.RemoveLast();
             CommonTracking current = (CommonTracking)commonTracking.Last.Value;
             current.rbData?.CopyToRigidBody(rb);
+            commonTracking.RemoveLast();
         }
 
 
         RewindEndCallback();
+        
 
         for(int i = 0; i < timeTracker.Count; i++)
         {
@@ -288,7 +290,6 @@ public class TimeEffectedObject : MonoBehaviour
         }
 
         isPaused = false;
-
     }
 
 
@@ -306,5 +307,6 @@ public class TimeEffectedObject : MonoBehaviour
     public virtual void RewindEndCallback(){}
 
     public virtual void TimeStepCallback(){}
+
 
 }

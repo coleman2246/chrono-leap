@@ -17,23 +17,27 @@ public class PlayerController : MonoBehaviour
     int jumpChargesRemaining;
 
     private Camera cam;
-    private CharacterController con;
     private Vector3 velocityVector;
+    private Vector3 startPos;
     private float startJump = 0;
+    private Transform meshTransform;
+    private CapsuleCollider collider;
+    private Rigidbody rb;
 
 
     void Start()
     {
         cam = GetComponentInChildren<Camera>();
         Cursor.lockState = CursorLockMode.Locked;
-        con = GetComponent<CharacterController>();
+        collider = GetComponent<CapsuleCollider>();
+        rb = GetComponent<Rigidbody>();
+
+        meshTransform = transform.Find("Mesh");
 
         jumpChargesRemaining = maxJumpCharges;
-
-
         velocityVector = new Vector3(0,0,0);
+        startPos = transform.position;
 
-        
     }
 
     void HandleAngle()
@@ -51,7 +55,7 @@ public class PlayerController : MonoBehaviour
 
 
 
-            if(dAngle + angle.x > 330 || dAngle + angle.x < 30)
+            if(dAngle + angle.x > 300 || dAngle + angle.x < 60)
             {
                 angle.x += dAngle;
             }
@@ -66,6 +70,9 @@ public class PlayerController : MonoBehaviour
         }
 
         cam.transform.rotation = Quaternion.Euler(angle);
+        angle.x = 0;
+        angle.z = 0;
+        meshTransform.transform.rotation = Quaternion.Euler(angle);;
 
     }
 
@@ -78,81 +85,34 @@ public class PlayerController : MonoBehaviour
         {
             return;
         }
-
-        Vector3 transformVel = Vector3.zero;
-
-        if(Mathf.Abs(verticalMovement) > 0 )
-        {
-            Vector3 cameraForward = cam.transform.forward;
-            Vector3 rbForwardTransformed = transform.InverseTransformDirection(cameraForward) * Mathf.Sign(verticalMovement);
-            transformVel += rbForwardTransformed;
-
-        }
-
-
-        if(Mathf.Abs(horizontalMovement) > 0 )
-        {
-            Vector3 camRight = cam.transform.right;
-            Vector3 rbRightTransformed = transform.InverseTransformDirection(camRight) * Mathf.Sign(horizontalMovement);
-            transformVel += rbRightTransformed;
-        }
-
-        float currentSpeed = con.velocity.magnitude;
-
-        float speed = Mathf.Min(currentSpeed + (Mathf.Pow(2f,accel)* Time.fixedDeltaTime), maxSpeed);
         
-        con.Move((transformVel*speed*Time.deltaTime) );
-    }
+        Vector3 forward = cam.transform.forward;
+        Vector3 right = cam.transform.right;
 
-    async void HandleGravity()
-    {
+        // dont want movement in y dim
+        forward.y = 0f; 
+        right.y = 0f;
+
+        forward.Normalize();
+        right.Normalize();
+
+        Vector3 movementDirection = (horizontalMovement * right + verticalMovement * forward).normalized;
+
+        Vector3 newVelocity = rb.velocity + movementDirection * accel * Time.deltaTime;
+        
 
 
-        Vector3 movementVector = new Vector3(0,0,0);
-        movementVector.y = velocityVector.y * Time.deltaTime + .5f * Physics.gravity.y * Mathf.Pow(Time.deltaTime,2);
-
-        con.Move(movementVector);
-
-        if(!isOnFloor)
+        if(Mathf.Abs(rb.velocity.x) > maxSpeed)
         {
-            velocityVector.y += Physics.gravity.y * Time.deltaTime;
+            newVelocity.x = Mathf.Sign(rb.velocity.x) * maxSpeed;
         }
 
-        /*
-        Vector3 prevPos = transform.position;
-        Vector3 vel = Vector3.zero;
-        float timeFalling = 0;
-
-        while(true)
+        if(Mathf.Abs(rb.velocity.y) > maxSpeed)
         {
-
-            Vector3 gravityComp = new Vector3(0,0,0);
-
-            //vel = (transform.position - prevPos) / Time.deltaTime;
-
-            if(!isOnFloor)
-            {
-                timeFalling += Time.deltaTime;
-
-                gravityComp = Mathf.Pow(2,timeFalling)* Physics.gravity;
-                //gravityComp.y = -Mathf.Pow(2,gravityComp.y);
-            }
-            else
-            {
-                timeFalling = 0;
-                await Task.Yield();
-                continue;
-                //vel = Vector3.zero;
-            }
-
-            //vel.y -= Mathf.Pow(2f,timeFalling*gravityComp.y);
-            con.Move(gravityComp * Time.deltaTime);
-
-            //prevPos = transform.position;
-            await Task.Yield();
-
+            newVelocity.y = Mathf.Sign(rb.velocity.y) * maxSpeed;
         }
-        */
+
+        rb.velocity =  newVelocity;
 
     }
 
@@ -183,65 +143,18 @@ public class PlayerController : MonoBehaviour
         float distanceRemaining = targetHeight - transform.position.y;
 
         float v0 = (distanceRemaining / apexTime)  - (  (Physics.gravity.y * apexTime) / 2f);
-        //velocityVector.y += v0;
-        velocityVector.y = v0;
+        rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y + v0, rb.velocity.z);
+
         startJump = Time.time;
-
-        
-
-
-        /*
-        float apexTime = Mathf.Sqrt((2f * jumpHeight) / Physics.gravity.y);
-        float v0 = (jumpHeight / apexTime)  - (  (Physics.gravity.y * apexTime) / 2f);
-        con.Move(
-        //con.velocity += Vector3(0,v0,0);
-        jumpChargesRemaining -= 1;
-        */
     }
-
-
-    /*
-    async void PerformJump()
-    {
-
-        
-        float currentTime = 0;
-
-
-        Vector3 vel = Vector3.zero;
-                /*
-        while(currentTime < apexTime)
-        {
-
-            float dd = currentTime * v0 + 0.5f * Physics.gravity.y * Mathf.Pow(currentTime,2f);
-
-            
-            Vector3 movementVector = new Vector3(0,dd - currentHeight, 0);
-
-            con.Move(movementVector);
-
-            currentTime += Time.deltaTime;
-
-            currentHeight = dd;
-            await Task.Yield();
-        }
-
-        Debug.Log(transform.position.y - startHeight);
-
-
-    }
-
-    */
-
+     
     void FixedUpdate()
     {
-        isOnFloor = Physics.Raycast(transform.position, -Vector3.up, con.bounds.extents.y + 0.05f);
-        HandleGravity();
+        isOnFloor = Physics.Raycast(transform.position, -Vector3.up, collider.bounds.extents.y + 0.1f);
     }
 
     void Update()
     {
-
         HandleJump();
         HandleMovement();
         HandleAngle();
