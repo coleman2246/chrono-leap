@@ -8,12 +8,19 @@ public enum PlayerHoldingItemStates
     HoldingItem,
 }
 
+
+
+
 public class PlayerWorldInteractions : MonoBehaviour
 {
  
-    public KeyCode pickUpKey = KeyCode.E;
     public float pickUpDistance = 3f;
+    public float interactionDistance = 3f;
+    public float interactionSphereRadius = 1f;
+    public bool isDead = false;
 
+
+    private Ray ray;
     private Rigidbody objectRb;
     private RigidbodyConstraints startConstraints;
     private FixedJoint joint;
@@ -22,10 +29,11 @@ public class PlayerWorldInteractions : MonoBehaviour
     private CapsuleCollider col;
     private PlayerHoldingItemStates holdingState = PlayerHoldingItemStates.Free;
 
-
     void Start()
     {
         cam = GetComponentInChildren<Camera>();
+        ray = cam.ScreenPointToRay(new Vector3(Screen.width / 2f, Screen.height / 2f, 0f));
+
         col = GetComponentInChildren<CapsuleCollider>();
         itemCarrying = null;
     }
@@ -33,13 +41,12 @@ public class PlayerWorldInteractions : MonoBehaviour
 
     void HandlePickUp()
     {
-        if (!Input.GetKeyDown(pickUpKey))
+        if (!Input.GetButtonDown("Fire3"))
         {
             return;
         }
 
         RaycastHit hit;
-        Ray ray = cam.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0f));
         if (Physics.Raycast(ray, out hit,pickUpDistance))
         {
             objectRb = hit.rigidbody;
@@ -72,14 +79,11 @@ public class PlayerWorldInteractions : MonoBehaviour
         objectRb.constraints = RigidbodyConstraints.FreezeRotation;
     
         holdingState =  PlayerHoldingItemStates.HoldingItem;
-
-
-
     }
 
     void HandleDrop()
     {
-        if (!Input.GetKeyDown(pickUpKey))
+        if (!Input.GetButtonDown("Fire3"))
         {
             return;
         }
@@ -93,16 +97,66 @@ public class PlayerWorldInteractions : MonoBehaviour
 
     }
 
+    public void HandleObjectInteraction()
+    {
+
+        RaycastHit hit;
+        if (!Physics.SphereCast(ray, interactionSphereRadius, out hit, interactionDistance))
+        {
+            return;
+        }
+
+        Collider col = hit.collider;
+        Rigidbody rb = hit.rigidbody;
+
+        GameObject obj = null;
+
+        if(col != null)
+        {
+            obj = col.gameObject;
+        }
+
+        if(rb != null)
+        {
+            obj = rb.gameObject;
+        }
+
+        if(obj == null)
+        {
+            return;
+        }
+
+        PlayerInteractableObject interactionObject = obj.GetComponent<PlayerInteractableObject>();
+
+        if(interactionObject == null)
+        {
+            return;
+        }
+
+        Debug.Log(interactionObject.GetInteractionMessage());
+
+        if(!Input.GetButtonDown("Interact"))
+        {
+            return;
+        }
+
+        interactionObject.InteractChild();
+    }
+
     void Update()
     {
+
+        ray = cam.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0f));
+
         if(PlayerHoldingItemStates.Free == holdingState)
         {
             HandlePickUp();
         }
         else
         {
-            Debug.Log(itemCarrying.transform.position);
             HandleDrop();
         }
+
+        HandleObjectInteraction();
     }
 }

@@ -20,12 +20,12 @@ struct MovingObjectTracking
 
 public class MovingObject : TimeEffectedObject
 {
-
+    public bool oneWay = false;
+    public bool activateOnTrigger = false;
+ 
     [SerializeField] private Transform endTransform;
     [SerializeField] private float periodTime = 1f;
     [SerializeField] private float acceptableDistance = 0.1f;
-    [SerializeField] private bool activateOnTrigger = false;
-    [SerializeField] private bool oneWay = false;
     [SerializeField] public bool triggered = false;
     [SerializeField] private Vector3 velocity;
 
@@ -209,8 +209,12 @@ public class MovingObject : TimeEffectedObject
 
     public override void RewindEndCallback()
     {
-        MovingObjectTracking newState = (MovingObjectTracking) platformStateTracker.Last.Value;
-        movingState = newState.movingState;
+        if(platformStateTracker.Last != null)
+        {
+            MovingObjectTracking newState = (MovingObjectTracking) platformStateTracker.Last.Value;
+            movingState = newState.movingState;
+
+        }
         SetRequiredVelocity();
     }
 
