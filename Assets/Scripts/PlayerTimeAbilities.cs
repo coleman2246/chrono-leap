@@ -2,14 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerAbilities : MonoBehaviour
+public class PlayerTimeAbilities : MonoBehaviour
 {
     [SerializeField] private int maxStoppedObjects = 3;
     [SerializeField] private int numberOfStoppedObjects = 0;
     [SerializeField] private int maxTimeStopCharges = 3;
     [SerializeField] private float timestopRechargeTime = 3;
     [SerializeField] private float freezeCooldown = 10f;
-    [SerializeField] private float currentCooldown = 0;
+    [SerializeField] private float currentCooldown = 0f;
+    [SerializeField] private float rewindRadius = 30f;
 
     LinkedList<TimeEffectedObject> stoppedObjects;
 
@@ -26,6 +27,7 @@ public class PlayerAbilities : MonoBehaviour
     {
         HandleTimePause();
         HandleTimeUnPause();
+        HandleRewind();
     }
 
 
@@ -144,10 +146,45 @@ public class PlayerAbilities : MonoBehaviour
 
     }
 
+    void HandleRewind()
+    {
+        if(!Input.GetButtonDown("RewindButton"))
+        {
+            return;
+        }
+
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, rewindRadius);
+
+        foreach(Collider currCollider in hitColliders)
+        {
+            TimeEffectedObject timeObject;
+            if(currCollider.transform.parent == null)
+            {
+
+                timeObject = currCollider.transform.GetComponent<TimeEffectedObject>();
+            }
+            else
+            {
+                timeObject = currCollider.transform.parent.GetComponent<TimeEffectedObject>();
+            }
+
+
+            if(timeObject == null)
+            {
+                continue;
+            }
+
+            timeObject.Rewind();
+
+        }
+
+
+    }
+
 
     void PauseNewObject(TimeEffectedObject timeObject)
     {
-        numberOfStoppedObjects = stoppedObjects.Count-1;
+        numberOfStoppedObjects = stoppedObjects.Count;
 
         while(stoppedObjects.Count >= maxStoppedObjects)
         {
@@ -175,10 +212,5 @@ public class PlayerAbilities : MonoBehaviour
             }
 
         }
-
     }
-
-
-
-    
 }

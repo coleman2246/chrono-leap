@@ -233,7 +233,7 @@ public class TimeEffectedObject : MonoBehaviour
             {
                 LinkedList<object> currTracker = timeTracker[i];
 
-                if(currTracker.Count > 1)
+                if(currTracker.Count > 2)
                 {
                     AnimateRewindCallback();
                     currTracker.RemoveLast();
@@ -245,7 +245,7 @@ public class TimeEffectedObject : MonoBehaviour
             }
 
 
-            if(commonTracking.Count > 1)
+            if(commonTracking.Count > 2)
             {
                 CommonTracking current = (CommonTracking)commonTracking.Last.Value;
                 current.tfData.CopyToTransform(transform);

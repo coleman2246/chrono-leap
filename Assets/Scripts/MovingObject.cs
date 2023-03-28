@@ -40,6 +40,8 @@ public class MovingObject : TimeEffectedObject
     private float timeInState = 0;
     private Vector3 requiredVelocity; 
     private bool prevTrigger = false;
+    private Dictionary<MovingObjectState, Vector3> velocityLookUp = new Dictionary<MovingObjectState, Vector3>();
+    private Dictionary<MovingObjectState, Vector3> posLookUp = new Dictionary<MovingObjectState, Vector3>();
 
     public void TriggerMovement()
     {
@@ -57,6 +59,8 @@ public class MovingObject : TimeEffectedObject
             velocity = new Vector3(0,0,0);
         }
 
+        PopulateLookups();
+
         SetRequiredVelocity();
 
     }
@@ -67,30 +71,21 @@ public class MovingObject : TimeEffectedObject
         platformStateTracker.AddLast((object)currentState);
     }
 
-    Vector3 CalculateDistanceVector()
+    void PopulateLookups()
     {
-        Vector3 currentPos = transform.position;
-        Vector3 targetVector = GetTargetVector();
-        return transform.position - targetVector;
+        Vector3 forwardVel = new Vector3();
+
+        forwardVel = (transform.position - endTransform.position) / periodTime;
+
+        velocityLookUp[MovingObjectState.MovingToEnd] = -1f * forwardVel;
+        velocityLookUp[MovingObjectState.MovingToStart] = forwardVel;
+
+        posLookUp[MovingObjectState.MovingToStart] = transform.position;
+        posLookUp[MovingObjectState.MovingToEnd] = endTransform.position;
+
     }
 
-    Vector3 GetTargetVector()
-    {
-        Vector3 targetVector = new Vector3(0,0,0);
-
-        if(movingState == MovingObjectState.MovingToEnd)
-        {
-            targetVector = endTransform.position;
-
-        }
-        else if(movingState == MovingObjectState.MovingToStart)
-        {
-            targetVector = startVector;
-        }
-
-        return targetVector;
-    }
-
+   
     void InvertMovingState()
     {
 
@@ -104,8 +99,6 @@ public class MovingObject : TimeEffectedObject
             movingState = MovingObjectState.MovingToEnd;
         }
         timeInState = 0;
-
-
     }
 
     void SetVelocity(Vector3 vec)
@@ -162,8 +155,7 @@ public class MovingObject : TimeEffectedObject
         {
             if(triggered)
             {
-                Vector3 distanceVector = CalculateDistanceVector();
-                requiredVelocity = -distanceVector / periodTime;
+                requiredVelocity = velocityLookUp[movingState];
             }
             else
             {
@@ -173,9 +165,10 @@ public class MovingObject : TimeEffectedObject
         }
         else
         {
-            Vector3 distanceVector = CalculateDistanceVector();
-            requiredVelocity = -distanceVector / periodTime;
+
+            requiredVelocity = velocityLookUp[movingState];
         }
+
     }
 
 
@@ -188,7 +181,7 @@ public class MovingObject : TimeEffectedObject
             SetRequiredVelocity();
         }
 
-        Vector3 distanceVector = CalculateDistanceVector();
+        Vector3 distanceVector = transform.position - posLookUp[movingState];
 
         if(distanceVector.magnitude < acceptableDistance)
         {
@@ -212,64 +205,13 @@ public class MovingObject : TimeEffectedObject
 
         SetVelocity(requiredVelocity);
         timeInState += Time.deltaTime;
-
-        /*
-        if(activateOnTrigger)
-        {
-            if(!triggered)
-            {
-                SetVelocity(Vector3.zero);
-                setVel = false;
-                return;
-            }
-            else if(triggered && !setVel)
-            {
-
-                SetRequiredVelocity();
-            }
-        }
-
-        SetVelocity(requiredVelocity);
-
-        if(!setVel)
-        {
-            SetRequiredVelocity();
-        }
-
-        if(setVel)
-        {
-            if (GetVelocity().magnitude < .1)
-            {
-                SetRequiredVelocity();
-            }
-
-        }
-
-        Vector3 distanceVector = CalculateDistanceVector();
-
-        if(distanceVector.magnitude < acceptableDistance)
-        {
-            if(!oneWay)
-            {
-                InvertMovingState();
-                setVel = false;
-                timeInState = 0;
-            }
-            else
-            {
-                ClearVelocity();
-                setVel = false;
-            }
-
-            triggered = false;
-        }
-        */
     }
 
     public override void RewindEndCallback()
     {
         MovingObjectTracking newState = (MovingObjectTracking) platformStateTracker.Last.Value;
         movingState = newState.movingState;
+        SetRequiredVelocity();
     }
 
 
@@ -302,12 +244,7 @@ public class MovingObject : TimeEffectedObject
 
     void UnPauseCallback()
     {
-        float copy = periodTime;
-        periodTime -= timeInState;
         SetRequiredVelocity();
-        periodTime = copy;
-        
-        
     }
     
 }
