@@ -32,6 +32,7 @@ public struct TransformData
 {
     Vector3 position;
     Quaternion rotation;
+    List<TransformData> children;
 
     public TransformData(Transform transform)
     {
@@ -39,12 +40,31 @@ public struct TransformData
         rotation = new Quaternion(transform.rotation.x, transform.rotation.y,
                 transform.rotation.z, transform.rotation.w);
 
+        children = new List<TransformData>();
+
+        foreach(Transform child in transform)
+        {
+            children.Add(new TransformData(child));
+        }
+
     }
+
+    
 
     public void CopyToTransform(Transform transform)
     {
         transform.position = position;
         transform.rotation = rotation;
+
+
+        foreach(Transform child in transform)
+        {
+            TransformData dataChild = children[0];
+            dataChild.CopyToTransform(child);
+            children.RemoveAt(0);
+        }
+
+
     }
 }
 
@@ -70,6 +90,16 @@ public struct CommonTracking
 
 public class TimeEffectedObject : MonoBehaviour
 {
+    /*
+     * This is the base class for all time objects
+     * The assumptions made of these objects are:
+     *  - They will not change in structure (some number of children and parents)
+     *  - They all have a transform (pretty sure all unity objects have transforms)
+     *  - They may or may not have a rigidbody
+     *  - All other things that need to be tracked in time need be setup in child class \
+     *  using the RegisterTracker function
+     *
+     * */
 
     [SerializeField] public bool isPaused = false;
     [SerializeField] private bool pauseTest = false;

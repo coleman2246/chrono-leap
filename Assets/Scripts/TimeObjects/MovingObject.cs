@@ -246,7 +246,6 @@ public class MovingObject : TimeEffectedObject
         Vector3 distanceVector = GetTargetDistance();
 
         // off track by more than 10cm
-        Debug.Log(Vector3.Distance(distanceVector.normalized, unitVector[movingState]));
         if(Vector3.Distance(distanceVector.normalized, unitVector[movingState]) > 0.1)
         {
             RecalculateVel();
