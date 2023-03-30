@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float yCamSmoothness = 1f;
     [SerializeField] float xCamSmoothness = 1f;
     [SerializeField] float jumpHeight = 2f;
+    [SerializeField] float timeToStop = .25f;
     [SerializeField] int maxJumpCharges = 2;
     [SerializeField] bool isOnFloor = false;
 
@@ -24,6 +25,10 @@ public class PlayerController : MonoBehaviour
     private CapsuleCollider collider;
     private Rigidbody rb;
 
+    private Vector3 negativeVel;
+    private bool[] isDecel = {false,false};
+    public float moveTime = 0;
+    public RigidbodyConstraints startingConstraints; 
 
     void Start()
     {
@@ -32,13 +37,22 @@ public class PlayerController : MonoBehaviour
         collider = GetComponent<CapsuleCollider>();
         rb = GetComponent<Rigidbody>();
 
+        if(rb != null)
+        {
+            startingConstraints = rb.constraints;
+        }
+
         meshTransform = transform.Find("Mesh");
 
         jumpChargesRemaining = maxJumpCharges;
         velocityVector = new Vector3(0,0,0);
         startPos = transform.position;
 
+        negativeVel = new Vector3(0,0,0);
+        
+
     }
+
 
     void HandleAngle()
     {
@@ -81,10 +95,6 @@ public class PlayerController : MonoBehaviour
         float horizontalMovement = Input.GetAxisRaw("Horizontal");
         float verticalMovement = Input.GetAxisRaw("Vertical");
 
-        if(horizontalMovement == 0 && verticalMovement == 0)
-        {
-            return;
-        }
         
         Vector3 forward = cam.transform.forward;
         Vector3 right = cam.transform.right;
@@ -95,6 +105,52 @@ public class PlayerController : MonoBehaviour
 
         forward.Normalize();
         right.Normalize();
+
+        /*
+        if(horizontalMovement == 0 && Mathf.Abs(rb.velocity.x) > 1)
+        {
+            isDecel[0] = true;
+            negativeVel.x  = rb.velocity.x / timeToStop * Time.deltaTime;
+        }
+        else
+        {
+            isDecel[0] = false;
+            negativeVel.x = 0;
+        }
+
+        if(isDecel[0])
+        {
+            Vector3 copy = rb.velocity;
+            copy.x -= negativeVel.x;
+            rb.velocity = copy;
+        }
+
+        if(verticalMovement == 0 && Mathf.Abs(rb.velocity.z) > 1)
+        {
+            isDecel[0] = true;
+            negativeVel.z  = rb.velocity.z / timeToStop * Time.deltaTime;
+        }
+        else
+        {
+            isDecel[1] = false;
+            negativeVel.z = 0;
+        }
+
+        if(isDecel[1])
+        {
+            Vector3 copy = rb.velocity;
+            copy.z -= negativeVel.z;
+            rb.velocity = copy;
+        }
+        */
+
+        if(horizontalMovement == 0 && verticalMovement == 0)
+        {
+            return;
+        }
+
+
+
 
         Vector3 movementDirection = (horizontalMovement * right + verticalMovement * forward).normalized;
 
@@ -107,13 +163,23 @@ public class PlayerController : MonoBehaviour
             newVelocity.x = Mathf.Sign(rb.velocity.x) * maxSpeed;
         }
 
-        if(Mathf.Abs(rb.velocity.y) > maxSpeed)
+        if(Mathf.Abs(rb.velocity.z) > maxSpeed)
         {
-            newVelocity.y = Mathf.Sign(rb.velocity.y) * maxSpeed;
+            newVelocity.z = Mathf.Sign(rb.velocity.z) * maxSpeed;
         }
 
+
+        PrepareForMovement();
         rb.velocity =  newVelocity;
 
+    }
+
+    void PrepareForMovement()
+    {
+
+        rb.isKinematic = false;
+        moveTime = Time.time;
+        rb.constraints = startingConstraints; 
     }
 
     void HandleJump()
@@ -146,11 +212,14 @@ public class PlayerController : MonoBehaviour
         rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y + v0, rb.velocity.z);
 
         startJump = Time.time;
+
+        PrepareForMovement();
     }
      
     void FixedUpdate()
     {
         isOnFloor = Physics.Raycast(transform.position, -Vector3.up, collider.bounds.extents.y + 0.1f);
+        
     }
 
     void Update()

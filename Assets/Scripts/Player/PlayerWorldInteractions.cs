@@ -159,4 +159,13 @@ public class PlayerWorldInteractions : MonoBehaviour
 
         HandleObjectInteraction();
     }
+
+
+    public void KillPlayer()
+    {
+        // pause game time
+        // show ui
+        // restart scene
+        // quit to main menu 
+    }
 }
