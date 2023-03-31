@@ -59,26 +59,14 @@ public class PlayerTimeAbilities : MonoBehaviour
 
         Debug.Log("Hit object: " + hit.transform.name);
 
-        bool hasRb = hit.transform.GetComponent<Rigidbody>() != null;
+        TimeEffectedObject foundObj = Utils.GetComponentInParentOrSibling<TimeEffectedObject>(hit.transform.gameObject);
 
-        if(hasRb)
-        {
-            timeObject = hit.transform.GetComponentInChildren<TimeEffectedObject>();
-        }
-
-
-        if(!hasRb && hit.transform.parent == null)
+        if(foundObj == default(TimeEffectedObject))
         {
             return timeObject;
         }
 
-        else if(!hasRb)
-        {
-            timeObject = hit.transform.parent.GetComponent<TimeEffectedObject>();
-        }
-
-        return timeObject;
-
+        return foundObj;
     }
 
 

@@ -13,10 +13,10 @@ public enum EnemyState
 
 public struct EnemyStateTracking
 {
-    EnemyState state;
-    float timeInState;
-    float timeSincePlayerSeen;
-    float timeSinceLastAttack;
+   public EnemyState state;
+   public float timeInState;
+   public float timeSincePlayerSeen;
+   public float timeSinceLastAttack;
 
     public EnemyStateTracking(EnemyState state, float timeInState, 
             float timeSincePlayerSeen, float timeSinceLastAttack)
@@ -31,19 +31,23 @@ public struct EnemyStateTracking
 
 public class BaseEnemy : TimeEffectedObject
 {
-    [SerializeField] private Transform headTransform;
+    [SerializeField] protected Transform headTransform;
     [SerializeField] private int fov = 135;
     [SerializeField] private int distance = 25;
     [SerializeField] private float forgetTime = 5f;
     [SerializeField] private float maxAttackInterval = .5f;
     [SerializeField] private EnemyState state = EnemyState.Patrol;
+    
+    [SerializeField] private AudioClip[] transStateSounds = new AudioClip[System.Enum.GetNames(typeof(EnemyState)).Length];
 
-    private Transform player;
+    protected Transform player;
     private float timeSincePlayerSeen = 0f;
     private LinkedList<object> baseEnemyStateTracker = new LinkedList<object>();
     private Dictionary<EnemyState, Action<bool>> stateFunctionMap = new Dictionary<EnemyState, Action<bool>>();
     protected float timeSinceLastAttack = 0f;
     protected float timeInState = 0f;
+    protected AudioSource audioSource;
+    private bool changedStates = false;
 
     public override void PauseableStart()
     {
@@ -53,9 +57,11 @@ public class BaseEnemy : TimeEffectedObject
         stateFunctionMap[EnemyState.Attacking] =  Attacking;
         stateFunctionMap[EnemyState.Dead] =  Dead;
         player = GameObject.FindGameObjectWithTag("Player").transform;
+        audioSource = gameObject.AddComponent<AudioSource>();
 
 
         RegisterTracker(ref baseEnemyStateTracker);
+        EnemyStartCallback();
 
     }
 
@@ -68,7 +74,27 @@ public class BaseEnemy : TimeEffectedObject
                 timeSinceLastAttack
         );
         baseEnemyStateTracker.AddLast((object)currentState);
+        EnemyTimeStepCallback();
+
     }
+    
+    public override void RewindEndCallback()
+    {
+        if(baseEnemyStateTracker.Last != null)
+        {
+            EnemyStateTracking newState = (EnemyStateTracking) baseEnemyStateTracker.Last.Value;
+            state = newState.state;
+            timeInState = newState.timeInState;
+            timeSincePlayerSeen = newState.timeSincePlayerSeen;
+            timeSinceLastAttack = newState.timeSinceLastAttack;
+        }
+
+        EnemyRewindCallback();
+
+    }
+
+
+
 
 
     public void Patrol(bool playerInFov)
@@ -190,10 +216,8 @@ public class BaseEnemy : TimeEffectedObject
 
     }
 
-
     public override void PauseableUpdate()
     {
-        timeInState += Time.deltaTime;
         bool inFov = PlayerInFOV();
 
         if(inFov)
@@ -207,6 +231,18 @@ public class BaseEnemy : TimeEffectedObject
 
 
         stateFunctionMap[state](inFov);
+
+        EnemyUpdateCallback();
+        if(changedStates)
+        {
+            timeInState = 0;
+            changedStates = false;
+        }
+        else
+        {
+            timeInState += Time.deltaTime;
+        }
+
     }
 
 
@@ -216,7 +252,18 @@ public class BaseEnemy : TimeEffectedObject
         EnemyState copy = this.state;
         this.state = state;
         TransitionStateCallback(copy,state);
-        timeInState = 0;
+
+        AudioClip clip = transStateSounds[(int)state];
+        if(clip != null)
+        {
+            audioSource.clip = clip;
+            audioSource.loop = false;
+            audioSource.Play();
+            
+        }
+
+        changedStates = true;
+
     }
 
     public void TransitionToNextState()
@@ -254,11 +301,14 @@ public class BaseEnemy : TimeEffectedObject
         Gizmos.DrawRay(headTransform.position, headTransform.forward * distance);
     }
 
-    public virtual void UpdateCallback(){}
+    public virtual void EnemyStartCallback(){}
+    public virtual void EnemyUpdateCallback(){}
     public virtual void PatrolCallback(){}
     public virtual void TriggeredCallback(){}
     public virtual void AttackingCallback(){}
     public virtual void DeadCallback(){}
+    public virtual void EnemyRewindCallback(){}
+    public virtual void EnemyTimeStepCallback(){}
     public virtual void TransitionStateCallback(EnemyState start, EnemyState end){}
 
      
