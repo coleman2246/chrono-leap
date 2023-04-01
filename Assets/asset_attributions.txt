@@ -1,0 +1,13 @@
+Most of the assets in this game have been made by me, but the few that havent have been put in this list:
+
+# Sounds
+## Alert.wav
+- https://freesound.org/people/Soundwarf/sounds/387533/
+- Is CC0 
+## TurretFire.wav
+- https://freesound.org/people/Bertsz/sounds/500908/
+- Is CC0
+- I made some slight mods to this one to sound better
+## PatrolTransition.wav
+- https://freesound.org/people/colorsCrimsonTears/sounds/577960/
+- CC0

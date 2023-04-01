@@ -16,6 +16,7 @@ public class TurretEnemy : BaseEnemy
     [SerializeField] private float maxYRotation = 180f;
     [SerializeField] private float maxXRotation = 30f;
     [SerializeField] private float rpm = 2;
+    [SerializeField] private float triggerRpm = 3;
     [SerializeField] private float attackRpm = 4;
     [SerializeField] private float angleTolerance = 2f;
     [SerializeField] private Vector3 targetAngle;
@@ -47,12 +48,25 @@ public class TurretEnemy : BaseEnemy
     {
         Quaternion rotationToApply = Quaternion.RotateTowards(headTransform.rotation, anglesLookup[rotState], targetRpm * rpmToDegSec * Time.deltaTime);
 
-        headTransform.rotation = rotationToApply;
+        // dont want any rotation in z dimension
+        // makes the head look gooofy
+        Vector3 eulerRot = rotationToApply.eulerAngles;
+        eulerRot.z = headTransform.rotation.eulerAngles.z; 
+
+        headTransform.rotation = Quaternion.Euler(eulerRot);
+
     }
 
-    public bool isAtTarget()
+    public bool isAtTarget(float customTol = default(float))
     {
-        return Quaternion.Angle(headTransform.rotation, anglesLookup[rotState]) < angleTolerance;
+        float tol = angleTolerance;
+
+        if(customTol != default(float))
+         {
+             tol = customTol;
+         }
+
+        return Quaternion.Angle(headTransform.rotation, anglesLookup[rotState]) < tol;
     }
 
     public void ChangeRotState()
@@ -90,29 +104,57 @@ public class TurretEnemy : BaseEnemy
 
     public override void TriggeredCallback()
     {
-        if(timeInState == 0)
-        {
-            Quaternion target = Quaternion.FromToRotation(headTransform.forward, directionToPlayer);
-            Debug.Log(target);
+        Quaternion target = GetQuaternionToPlayer();
 
-            rotState = TurretRotState.RotToEnemy;
-            anglesLookup[rotState] = target;
-        }
+        rotState = TurretRotState.RotToEnemy;
+        anglesLookup[rotState] = target;
 
         if(isAtTarget())
         {
-            Debug.Log("Pointed toward player");
+            TransitionToNextState();
+        }
+        else
+        {
+
+            RotationStep(triggerRpm);
         }
 
-        RotationStep(attackRpm);
 
+    }
+
+    public override void AttackingCallback()
+    {
+        if(timeInState == 0)
+        {
+            rotState = TurretRotState.AttackEnemy;
+        }
+
+        float targetError = 0.5f;
+
+        if(timeSinceLastAttack  > maxAttackInterval && isAtTarget(targetError))
+        {
+            Vector3 endPoint = bulletSpawnLocation.position + headTransform.forward * distance;         
+            FireBullet(endPoint);
+        }
+        else
+        {
+            Quaternion target = GetQuaternionToPlayer();
+            anglesLookup[rotState] = target;
+
+            timeSinceLastAttack += Time.deltaTime;
+            
+            if(!isAtTarget(targetError))
+            {
+                RotationStep(attackRpm);
+            }
+        }
+        
     }
 
 
     public override void EnemyRewindCallback()
     {
         
-        Debug.Log(turretStateTracker.Count);
         if(turretStateTracker.Last != null)
         {
             TurretRotState newState = (TurretRotState) turretStateTracker.Last.Value;

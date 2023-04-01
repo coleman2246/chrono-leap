@@ -33,12 +33,15 @@ public class BaseEnemy : TimeEffectedObject
 {
     [SerializeField] protected Transform headTransform;
     [SerializeField] private int fov = 135;
-    [SerializeField] private int distance = 25;
+    [SerializeField] protected int distance = 25;
     [SerializeField] private float forgetTime = 5f;
-    [SerializeField] private float maxAttackInterval = .5f;
+    [SerializeField] protected float maxAttackInterval = .5f;
     [SerializeField] private EnemyState state = EnemyState.Patrol;
+    [SerializeField] protected Transform bulletSpawnLocation;
+    [SerializeField] protected GameObject bulletPrefab;
     
     [SerializeField] private AudioClip[] transStateSounds = new AudioClip[System.Enum.GetNames(typeof(EnemyState)).Length];
+    [SerializeField] private AudioClip fireSound;
 
     protected Transform player;
     private float timeSincePlayerSeen = 0f;
@@ -121,10 +124,12 @@ public class BaseEnemy : TimeEffectedObject
             return;
         }
 
+        /*
         if(!playerInFov)
         {
             return;
         }
+        */
 
         TriggeredCallback();
 
@@ -138,10 +143,13 @@ public class BaseEnemy : TimeEffectedObject
             return;
         }
 
+        /*
         if(!playerInFov)
         {
             return;
         }
+        */
+        AttackingCallback();
         
     }
 
@@ -184,7 +192,10 @@ public class BaseEnemy : TimeEffectedObject
         }
 
         RaycastHit hit;
-        if(Physics.Raycast(headTransform.position, directionToPlayer.normalized * directionToPlayer.magnitude, out hit, distance, LayerMask.NameToLayer("Enemy")))
+
+        // want everything that is not enemy
+
+        if(Physics.Raycast(headTransform.position, directionToPlayer.normalized * directionToPlayer.magnitude, out hit, distance, ~LayerMask.GetMask("Enemy")))
         {
 
                 GameObject playerGameObj = null;
@@ -214,6 +225,18 @@ public class BaseEnemy : TimeEffectedObject
 
         return false;
 
+    }
+    
+    public Quaternion GetQuaternionToPlayer()
+    {
+        Vector3 directionToPlayer = player.position - headTransform.position;
+        Quaternion rotationToPlayer = Quaternion.FromToRotation(headTransform.forward, directionToPlayer);
+        float angleToPlayerY = rotationToPlayer.eulerAngles.y;
+        float angleToPlayerX = rotationToPlayer.eulerAngles.x;
+
+        // dont want any rotation in z dimension
+        Quaternion rot =  Quaternion.Euler(angleToPlayerX, angleToPlayerY, 0) * headTransform.rotation;
+        return rot;
     }
 
     public override void PauseableUpdate()
@@ -299,6 +322,34 @@ public class BaseEnemy : TimeEffectedObject
         Gizmos.DrawRay(headTransform.position, rightDir * distance);
         Gizmos.color = Color.red;
         Gizmos.DrawRay(headTransform.position, headTransform.forward * distance);
+    }
+
+    protected void FireBullet(Vector3 endPoint)
+    {
+        // need to add 180 or they spawn backwards
+        GameObject bulletGameObj = Instantiate(bulletPrefab,
+                bulletSpawnLocation.position,
+                bulletSpawnLocation.rotation * Quaternion.Euler(0,180,0)
+        );
+
+
+        TimeEffectableBullet timeBullet = bulletGameObj.GetComponent<TimeEffectableBullet>();
+
+        timeBullet.oneWay = true;
+        timeBullet.useSpeed = true;
+        timeBullet.speed = 6f;
+
+        if(fireSound != null)
+        {
+            audioSource.clip = fireSound;
+            audioSource.loop = false;
+            audioSource.Play();
+        }
+        
+        timeBullet.SetEndPos(endPoint);
+
+        timeSinceLastAttack = 0;
+
     }
 
     public virtual void EnemyStartCallback(){}

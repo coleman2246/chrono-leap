@@ -164,6 +164,7 @@ public class PlayerWorldInteractions : MonoBehaviour
     public void KillPlayer()
     {
         // pause game time
+        Debug.Log("Player Killed");
         // show ui
         // restart scene
         // quit to main menu 

@@ -10,7 +10,7 @@ public class PlayerTimeAbilities : MonoBehaviour
     [SerializeField] private float timestopRechargeTime = 3;
     [SerializeField] private float freezeCooldown = 10f;
     [SerializeField] private float currentCooldown = 0f;
-    [SerializeField] private float rewindRadius = 30f;
+    [SerializeField] private float radius = 30f;
 
     LinkedList<TimeEffectedObject> stoppedObjects;
 
@@ -52,7 +52,8 @@ public class PlayerTimeAbilities : MonoBehaviour
 
         RaycastHit hit;
 
-        if (!Physics.Raycast(ray, out hit))
+
+        if (!Physics.Raycast(ray, out hit,Mathf.Infinity, ~LayerMask.GetMask("Player")))
         {
             return timeObject;
         }
@@ -141,7 +142,7 @@ public class PlayerTimeAbilities : MonoBehaviour
             return;
         }
 
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, rewindRadius);
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, radius);
 
         foreach(Collider currCollider in hitColliders)
         {

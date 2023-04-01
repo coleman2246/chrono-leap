@@ -6,7 +6,7 @@ public class PlayerInteractableElevatorButton : PlayerInteractableObject
 {
     public bool pressed = false;
 
-    [SerializeField] private MovingObject elevatorTimeObj;
+    [SerializeField] private TimeEffectableMovingObject elevatorTimeObj;
 
     public void Start()
     {
