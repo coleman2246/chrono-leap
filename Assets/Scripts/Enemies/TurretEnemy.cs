@@ -98,18 +98,19 @@ public class TurretEnemy : BaseEnemy
             ChangeRotState();
         }
 
+
         RotationStep(rpm);
     }
 
 
-    public override void TriggeredCallback()
+    public override void TriggeredCallback(bool inFov)
     {
         Quaternion target = GetQuaternionToPlayer();
 
         rotState = TurretRotState.RotToEnemy;
         anglesLookup[rotState] = target;
 
-        if(isAtTarget())
+        if(isAtTarget() && inFov)
         {
             TransitionToNextState();
         }
@@ -122,7 +123,7 @@ public class TurretEnemy : BaseEnemy
 
     }
 
-    public override void AttackingCallback()
+    public override void AttackingCallback(bool inFov)
     {
         if(timeInState == 0)
         {
@@ -131,7 +132,7 @@ public class TurretEnemy : BaseEnemy
 
         float targetError = 0.5f;
 
-        if(timeSinceLastAttack  > maxAttackInterval && isAtTarget(targetError))
+        if(timeSinceLastAttack  > maxAttackInterval && isAtTarget(targetError) && inFov)
         {
             Vector3 endPoint = bulletSpawnLocation.position + headTransform.forward * distance;         
             FireBullet(endPoint);

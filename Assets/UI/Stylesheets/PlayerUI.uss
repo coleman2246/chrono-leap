@@ -1,0 +1,12 @@
+.charge-bar .unity-progress-bar__progress {
+    background-color: #3017BA;
+    border-radius: 11
+
+}
+
+.charge-bar .unity-progress-bar__background {
+    background-color: #ED0037;
+    border-radius: 11;
+    border-color: #000000;
+
+}

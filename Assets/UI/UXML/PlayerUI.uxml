@@ -1,0 +1,7 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/Stylesheets/PlayerUI.uss?fileID=7433441132597879392&amp;guid=a44e730fde15a2e45939d34376fe9995&amp;type=3#PlayerUI" />
+    <ui:ProgressBar value="22" name="TimeCharges" class="charge-bar" style="bottom: auto; top: 95%; left: 3%; width: 20%; height: 10%; font-size: 0; -unity-background-image-tint-color: rgb(43, 7, 7); position: absolute;" />
+    <ui:ProgressBar value="22" name="ObjectsFrozen" class="charge-bar" style="bottom: auto; top: 95%; left: auto; width: 20%; height: 10%; font-size: 0; -unity-background-image-tint-color: rgb(43, 7, 7); position: absolute; right: 3%;" />
+    <ui:Label text="Charges Remaining: " display-tooltip-when-elided="true" name="ChargesLabel" style="left: 7%; top: 91%; position: absolute;" />
+    <ui:Label text="Enemies Frozen" display-tooltip-when-elided="true" name="FrozenLabel" style="left: auto; top: 91%; position: absolute; right: 11%;" />
+</ui:UXML>

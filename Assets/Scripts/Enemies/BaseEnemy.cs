@@ -131,7 +131,7 @@ public class BaseEnemy : TimeEffectedObject
         }
         */
 
-        TriggeredCallback();
+        TriggeredCallback(playerInFov);
 
     }
 
@@ -143,13 +143,7 @@ public class BaseEnemy : TimeEffectedObject
             return;
         }
 
-        /*
-        if(!playerInFov)
-        {
-            return;
-        }
-        */
-        AttackingCallback();
+        AttackingCallback(playerInFov);
         
     }
 
@@ -355,8 +349,8 @@ public class BaseEnemy : TimeEffectedObject
     public virtual void EnemyStartCallback(){}
     public virtual void EnemyUpdateCallback(){}
     public virtual void PatrolCallback(){}
-    public virtual void TriggeredCallback(){}
-    public virtual void AttackingCallback(){}
+    public virtual void TriggeredCallback(bool inFov){}
+    public virtual void AttackingCallback(bool inFov){}
     public virtual void DeadCallback(){}
     public virtual void EnemyRewindCallback(){}
     public virtual void EnemyTimeStepCallback(){}

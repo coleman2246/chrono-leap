@@ -112,6 +112,7 @@ public class TimeEffectedObject : MonoBehaviour
     private List<LinkedList<object>> timeTracker = new List<LinkedList<object>>();
 
     private CommonTracking pauseSaveState;
+    private PlayerTimeAbilities player;
 
     protected Rigidbody rb;
 
@@ -123,6 +124,8 @@ public class TimeEffectedObject : MonoBehaviour
         PauseableStart();
 
         InvokeRepeating("NewTimeStep",0, 1f/rewindFrequency);
+
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerTimeAbilities>();
 
     }
 
@@ -322,6 +325,17 @@ public class TimeEffectedObject : MonoBehaviour
         isPaused = false;
     }
 
+    void OnDestroy()
+    {
+        OnDestroyCallback();
+        if(isPaused)
+        {
+            player.RemoveObject(this);
+
+        }
+
+    }
+
 
     // all children class should use these instead of gameObject defaults 
     public virtual void PauseableUpdate(){}
@@ -337,6 +351,7 @@ public class TimeEffectedObject : MonoBehaviour
     public virtual void RewindEndCallback(){}
 
     public virtual void TimeStepCallback(){}
+    public virtual void OnDestroyCallback(){}
 
 
 }

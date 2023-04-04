@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class PlayerTimeAbilities : MonoBehaviour
 {
-    [SerializeField] private int maxStoppedObjects = 3;
-    [SerializeField] private int numberOfStoppedObjects = 0;
-    [SerializeField] private int maxTimeStopCharges = 3;
-    [SerializeField] private float timestopRechargeTime = 3;
+    [SerializeField] public int maxStoppedObjects = 3;
+    [SerializeField] public int numberOfStoppedObjects = 0;
+    [SerializeField] public int maxTimeStopCharges = 3;
+    [SerializeField] public float timestopRechargeTime = 3;
     [SerializeField] private float freezeCooldown = 10f;
     [SerializeField] private float currentCooldown = 0f;
     [SerializeField] private float radius = 30f;
@@ -96,12 +96,17 @@ public class PlayerTimeAbilities : MonoBehaviour
 
     void HandleTimePause()
     {
-        currentCooldown -= Time.deltaTime;
+        if(remainingTimeStopCharges < maxTimeStopCharges)
+        {
+
+            currentCooldown -= Time.deltaTime;
+        }
+
 
         if(currentCooldown < 0)
         {
             currentCooldown = freezeCooldown;
-            SetTimeStopCharges(remainingTimeStopCharges += 1);
+            SetTimeStopCharges(remainingTimeStopCharges+1);
         }
 
         if(remainingTimeStopCharges < 1)
@@ -173,7 +178,6 @@ public class PlayerTimeAbilities : MonoBehaviour
 
     void PauseNewObject(TimeEffectedObject timeObject)
     {
-        numberOfStoppedObjects = stoppedObjects.Count;
 
         while(stoppedObjects.Count >= maxStoppedObjects)
         {
@@ -183,23 +187,35 @@ public class PlayerTimeAbilities : MonoBehaviour
 
         timeObject.Pause();
         stoppedObjects.AddLast(timeObject);
+
+        numberOfStoppedObjects = stoppedObjects.Count;
     }
 
-    void UnPauseNewObject(TimeEffectedObject timeObject)
+    public bool RemoveObject(TimeEffectedObject timeObject)
     {
-
         int targetId = timeObject.GetInstanceID();
 
         foreach(TimeEffectedObject currObject in stoppedObjects)
         {
             if(currObject.GetInstanceID() == targetId)
             {
-                currObject.UnPause();
                 stoppedObjects.Remove(currObject);
                 numberOfStoppedObjects -= 1;
-                return;
+                return true;
             }
 
+        }
+
+        return false;
+
+    }
+
+    void UnPauseNewObject(TimeEffectedObject timeObject)
+    {
+        bool removed = RemoveObject(timeObject);
+        if(removed)
+        {
+            timeObject.UnPause();
         }
     }
 }
