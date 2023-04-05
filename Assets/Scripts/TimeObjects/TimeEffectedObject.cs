@@ -107,14 +107,18 @@ public class TimeEffectedObject : MonoBehaviour
     [SerializeField] private float rewindLength = 5f; // in secs
     [SerializeField] private float rewindFrequency = 10f; // in hz
     [SerializeField] private float playBackSpeed = .5f; // in secs
+
+    public Shader outLine;
     
     private LinkedList<object> commonTracking = new LinkedList<object>();
     private List<LinkedList<object>> timeTracker = new List<LinkedList<object>>();
 
     private CommonTracking pauseSaveState;
-    private PlayerTimeAbilities player;
+    private PlayerTimeAbilities playerTime;
 
     protected Rigidbody rb;
+    private GameObject hourglassPrefab;
+    private GameObject spawnedHourglass;
 
     void Start()
     {
@@ -125,7 +129,9 @@ public class TimeEffectedObject : MonoBehaviour
 
         InvokeRepeating("NewTimeStep",0, 1f/rewindFrequency);
 
-        player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerTimeAbilities>();
+        playerTime = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerTimeAbilities>();
+        hourglassPrefab = Resources.Load ("Prefabs/Hourglass") as GameObject;
+
 
     }
 
@@ -211,6 +217,38 @@ public class TimeEffectedObject : MonoBehaviour
         pauseSaveState = new CommonTracking(transform,rb);
         isPaused = true;
 
+
+        // fix this later
+        /*
+        Vector3 spawnLocation = transform.position;
+        Quaternion quaternion = Quaternion.identity;
+
+
+        Transform[] childTransforms = GetComponentsInChildren<Transform>();
+
+        // Find the highest point in the child objects
+        float highestPoint = float.MinValue;
+        foreach(Transform childTransform in childTransforms)
+        {
+            if (childTransform.position.y > highestPoint)
+            {
+                highestPoint = childTransform.position.y;
+            }
+        }
+
+        spawnLocation.y = highestPoint + 0.1f;
+
+
+        spawnedHourglass = Instantiate(hourglassPrefab,
+                spawnLocation,
+                quaternion,
+                transform
+        );
+
+        spawnedHourglass.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+        */
+
+
         ClearRigidBody(); 
 
     }
@@ -242,7 +280,13 @@ public class TimeEffectedObject : MonoBehaviour
             pauseSaveState.rbData?.CopyToRigidBody(rb);
         }
 
+
         isPaused = false;
+        
+        if(spawnedHourglass != null)
+        {
+            Destroy(spawnedHourglass);
+        }
 
     }
 
@@ -330,8 +374,7 @@ public class TimeEffectedObject : MonoBehaviour
         OnDestroyCallback();
         if(isPaused)
         {
-            player.RemoveObject(this);
-
+            playerTime.RemoveObject(this);
         }
 
     }

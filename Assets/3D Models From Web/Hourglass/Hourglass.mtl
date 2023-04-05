@@ -1,0 +1,719 @@
+newmtl dor?
+Kd 0.784314 0.784314 0.784314
+Ke 0 0 0
+Ka 1 1 1
+Ks 0 0 0
+Ns 400
+Tr 0
+d 1
+Ni 1
+Tf 1 1 1
+
+newmtl dor·
+Kd 0.784 0.784 0.784
+Ke 0 0 0
+Ka 1 1 1
+Ks 0 0 0
+Ns 400
+Tr 0
+d 1
+Ni 1
+Tf 1 1 1
+
+newmtl caf·
+Kd 0.168627 0.121569 0.0666667
+Ke 0 0 0
+Ka 0.87 0.87 0.87
+Ks 0.705 0.705 0.705
+Ns 600
+Tr 0
+d 1
+Ni 1
+Tf 0 0 0
+
+newmtl hanse
+Kd 0.784314 0.784314 0.784314
+Ke 0 0 0
+Ka 1 1 1
+Ks 0.8 0.8 0.8
+Ns 600
+Tr 0
+d 1
+Ni 1
+Tf 1 1 1
+
+newmtl motif2
+Kd 1 1 1
+Ke 0 0 0
+Ka 1 1 1
+Ks 0.8 0.8 0.8
+Ns 600
+Tr 0
+d 1
+Ni 1
+Tf 1 1 1
+
+newmtl tasse
+Kd 1 1 1
+Ke 0 0 0
+Ka 1 1 1
+Ks 0.8 0.8 0.8
+Ns 600
+Tr 0
+d 1
+Ni 1
+Tf 1 1 1
+
+newmtl cd-bace
+Kd 0.0666667 0.0666667 0.0666667
+Ke 0 0 0
+Ka 1 1 1
+Ks 0.8 0.8 0.8
+Ns 600
+Tr 0
+d 1
+Ni 1
+Tf 1 1 1
+
+newmtl cd-bace-top
+Kd 0.152941 0.152941 0.152941
+Ke 0 0 0
+Ka 0.8 0.8 0.8
+Ks 0.4 0.4 0.4
+Ns 400
+Tr 0
+d 1
+Ni 1
+Tf 1 1 1
+
+newmtl cd-pla-0
+Kd 0.596078 0.662745 0.662745
+Ke 0 0 0
+Ka 0.1 0.1 0.1
+Ks 0.9 0.9 0.9
+Ns 600
+Tr 0.9
+d 0.1
+Ni 1.55
+Tf 1 1 1
+
+newmtl cd-pla-0-s1
+Kd 0.596078 0.662745 0.662745
+Ke 0 0 0
+Ka 0.1 0.1 0.1
+Ks 0.9 0.9 0.9
+Ns 600
+Tr 0.9
+d 0.1
+Ni 1.55
+Tf 1 1 1
+
+newmtl cd-pla-0-s2
+Kd 0.596078 0.662745 0.662745
+Ke 0 0 0
+Ka 0.1 0.1 0.1
+Ks 0.9 0.9 0.9
+Ns 600
+Tr 0.9
+d 0.1
+Ni 1.55
+Tf 1 1 1
+
+newmtl cd-pla-1
+Kd 0.647059 0.658824 0.6
+Ke 0 0 0
+Ka 0.1 0.1 0.1
+Ks 0.9 0.9 0.9
+Ns 600
+Tr 1
+d 0
+Ni 1
+Tf 1 1 1
+
+newmtl cd-pla-1-s1
+Kd 0.647059 0.658824 0.6
+Ke 0 0 0
+Ka 0.1 0.1 0.1
+Ks 0.9 0.9 0.9
+Ns 600
+Tr 1
+d 0
+Ni 1
+Tf 1 1 1
+
+newmtl cd-pla-1-s2
+Kd 0.647059 0.658824 0.6
+Ke 0 0 0
+Ka 0.1 0.1 0.1
+Ks 0.9 0.9 0.9
+Ns 600
+Tr 1
+d 0
+Ni 1
+Tf 1 1 1
+
+newmtl Citrouille
+Kd 0.972549 0.752941 0.254902
+Ke 0 0 0
+Ka 0.89 0.89 0.89
+Ks 0.11 0.11 0.11
+Ns 400
+Tr 0
+d 1
+Ni 1
+Tf 0 0 0
+
+newmtl CitrouilleInterieur
+Kd 0.956863 0.560784 0.0235294
+Ke 0 0 0
+Ka 1 1 1
+Ks 0.13 0.13 0.13
+Ns 200
+Tr 0
+d 1
+Ni 1
+Tf 1 1 1
+
+newmtl decoupe
+Kd 0.956863 0.560784 0.0235294
+Ke 0 0 0
+Ka 1 1 1
+Ks 0.13 0.13 0.13
+Ns 200
+Tr 0
+d 1
+Ni 1
+Tf 1 1 1
+
+newmtl feuille
+Kd 0.223529 0.509804 0.239216
+Ke 0 0 0
+Ka 1 1 1
+Ks 0 0 0
+Ns 400
+Tr 0
+d 1
+Ni 1
+Tf 1 1 1
+
+newmtl Queue
+Kd 0.223529 0.509804 0.239216
+Ke 0 0 0
+Ka 1 1 1
+Ks 0 0 0
+Ns 400
+Tr 0
+d 1
+Ni 1
+Tf 1 1 1
+
+newmtl feuille
+Kd 0.223529 0.509804 0.239216
+Ke 0 0 0
+Ka 1 1 1
+Ks 0 0 0
+Ns 400
+Tr 0
+d 1
+Ni 1
+Tf 1 1 1
+
+newmtl Queue
+Kd 0.223529 0.509804 0.239216
+Ke 0 0 0
+Ka 1 1 1
+Ks 0 0 0
+Ns 400
+Tr 0
+d 1
+Ni 1
+Tf 1 1 1
+
+newmtl Armure
+Kd 0.282353 0.133333 0
+Ke 0 0 0
+Ka 0.1 0.1 0.1
+Ks 0 0 0
+Ns 200
+Tr 0
+d 1
+Ni 1
+Tf 1 1 1
+
+newmtl Col
+Kd 0.282353 0.133333 0
+Ke 0 0 0
+Ka 0.1 0.1 0.1
+Ks 0 0 0
+Ns 200
+Tr 0
+d 1
+Ni 1
+Tf 1 1 1
+
+newmtl contour_oeil
+Kd 0.0980392 0.176471 0.156863
+Ke 0 0 0
+Ka 1 1 1
+Ks 0.465 0.465 0.465
+Ns 600
+Tr 0
+d 1
+Ni 1
+Tf 1 1 1
+
+newmtl dent
+Kd 1 1 0.929412
+Ke 0 0 0
+Ka 0.825 0.825 0.825
+Ks 0.815 0.815 0.815
+Ns 600
+Tr 0
+d 1
+Ni 1
+Tf 1 1 1
+
+newmtl nez
+Kd 0 0 0
+Ke 0 0 0
+Ka 1 1 1
+Ks 0.665 0.665 0.665
+Ns 200
+Tr 0
+d 1
+Ni 1
+Tf 1 1 1
+
+newmtl peau
+Kd 0.0980392 0.219608 0.196078
+Ke 0 0 0
+Ka 1 1 1
+Ks 0 0 0
+Ns 600
+Tr 0
+d 1
+Ni 1
+Tf 1 1 1
+
+newmtl sourcils
+Kd 0.0588235 0.101961 0.0980392
+Ke 0 0 0
+Ka 1 1 1
+Ks 1 1 1
+Ns 800
+Tr 1
+d 0
+Ni 1
+Tf 0 0 0
+
+newmtl Default
+Kd 0 0.152941 0.882353
+Ke 0 0 0
+Ka 1 1 1
+Ks 1 1 1
+Ns 800
+Tr 0
+d 1
+Ni 1
+Tf 1 1 1
+
+newmtl Blanc
+Kd 1 1 1
+Ke 0 0 0
+Ka 1 1 1
+Ks 0.9 0.9 0.9
+Ns 600
+Tr 0
+d 1
+Ni 1
+Tf 1 1 1
+
+newmtl Colonne
+Kd 1 1 1
+Ke 0 0 0
+Ka 1 1 1
+Ks 0.9 0.9 0.9
+Ns 600
+Tr 0
+d 1
+Ni 1
+Tf 1 1 1
+
+newmtl colonne_mapp?
+Kd 1 1 1
+Ke 0 0 0
+Ka 1 1 1
+Ks 0.8 0.8 0.8
+Ns 600
+Tr 0
+d 1
+Ni 1
+Tf 1 1 1
+
+newmtl Dorure
+Kd 0.784314 0.784314 0.0235294
+Ke 0 0 0
+Ka 1 1 1
+Ks 0.5 0.5 0.5
+Ns 400
+Tr 0
+d 1
+Ni 1
+Tf 1 1 1
+
+newmtl pierres_bleues
+Kd 0 0 0.662745
+Ke 0 0 0
+Ka 1 1 1
+Ks 1 1 1
+Ns 800
+Tr 0.4
+d 0.6
+Ni 2
+Tf 1 1 1
+
+newmtl pierres_rouges
+Kd 0.760784 0 0
+Ke 0 0 0
+Ka 1 1 1
+Ks 1 1 1
+Ns 800
+Tr 0.4
+d 0.6
+Ni 2
+Tf 1 1 1
+
+newmtl Default
+Kd 1 1 1
+Ke 0 0 0
+Ka 1 1 1
+Ks 0.9 0.9 0.9
+Ns 600
+Tr 0
+d 1
+Ni 1
+Tf 1 1 1
+
+newmtl d?o
+Kd 0.854902 0.921569 1
+Ke 0.7 0.7 0.7
+Ka 1 1 1
+Ks 0 0 0
+Ns 400
+Tr 0
+d 1
+Ni 1
+Tf 1 1 1
+
+newmtl d?o_2
+Kd 0.803922 0.772549 0.956863
+Ke 0.69 0.69 0.69
+Ka 1 1 1
+Ks 0 0 0
+Ns 400
+Tr 0
+d 1
+Ni 1
+Tf 1 1 1
+
+newmtl encadrures
+Kd 1 0.913726 0.909804
+Ke 0.37 0.37 0.37
+Ka 1 1 1
+Ks 0 0 0
+Ns 400
+Tr 0
+d 1
+Ni 1
+Tf 1 1 1
+
+newmtl marches
+Kd 1 1 1
+Ke 0 0 0
+Ka 1 1 1
+Ks 0.9 0.9 0.9
+Ns 600
+Tr 0
+d 1
+Ni 1
+Tf 1 1 1
+
+newmtl murs_bf
+Kd 1 1 1
+Ke 0 0 0
+Ka 1 1 1
+Ks 0.3 0.3 0.3
+Ns 400
+Tr 0
+d 1
+Ni 1
+Tf 1 1 1
+
+newmtl murs_gd
+Kd 1 1 1
+Ke 0 0 0
+Ka 1 1 1
+Ks 0.3 0.3 0.3
+Ns 400
+Tr 0
+d 1
+Ni 1
+Tf 1 1 1
+
+newmtl plafond
+Kd 1 1 1
+Ke 0 0 0
+Ka 1 1 1
+Ks 0.9 0.9 0.9
+Ns 600
+Tr 0
+d 1
+Ni 1
+Tf 1 1 1
+
+newmtl poutres
+Kd 1 1 1
+Ke 0 0 0
+Ka 1 1 1
+Ks 0.9 0.9 0.9
+Ns 600
+Tr 0
+d 1
+Ni 1
+Tf 1 1 1
+
+newmtl sol
+Kd 1 1 1
+Ke 0.48 0.48 0.48
+Ka 1 1 1
+Ks 0.8 0.8 0.8
+Ns 600
+Tr 0
+d 1
+Ni 1
+Tf 1 1 1
+
+newmtl nuage
+Kd 0.67451 0.87451 0.768628
+Ke 0.6 0.6 0.6
+Ka 1 1 1
+Ks 0 0 0
+Ns 400
+Tr 0.2
+d 0.8
+Ni 1
+Tf 0 0 0
+
+newmtl astro_dev
+Kd 0.831373 0.913726 1
+Ke 0 0 0
+Ka 1.5 1.5 1.5
+Ks 2 2 2
+Ns 200
+Tr 0.45
+d 0.55
+Ni 1
+Tf 1 1 1
+
+newmtl astro_fond
+Kd 0.831373 0.913726 1
+Ke 0 0 0
+Ka 1 1 1
+Ks 2 2 2
+Ns 200
+Tr 0.45
+d 0.55
+Ni 1
+Tf 0 0 0
+
+newmtl Default
+Kd 0.784314 0.784314 0.784314
+Ke 0 0 0
+Ka 1 1 1
+Ks 0 0 0
+Ns 400
+Tr 0
+d 1
+Ni 1
+Tf 1 1 1
+
+newmtl et_org
+Kd 0 0 0
+Ke 0 0 0
+Ka 1 1 1
+Ks 0 0 0
+Ns 400
+Tr 0
+d 1
+Ni 1
+Tf 1 1 1
+
+newmtl et1
+Kd 1 1 0.890196
+Ke 0 0 0
+Ka 1 1 1
+Ks 0 0 0
+Ns 400
+Tr 0.5
+d 0.5
+Ni 1
+Tf 0 0 0
+
+newmtl et2
+Kd 1 1 0.545098
+Ke 0 0 0
+Ka 1 1 1
+Ks 0 0 0
+Ns 400
+Tr 0.5
+d 0.5
+Ni 1
+Tf 0 0 0
+
+newmtl et3
+Kd 1 1 0
+Ke 0 0 0
+Ka 1 1 1
+Ks 0 0 0
+Ns 400
+Tr 0.5
+d 0.5
+Ni 1
+Tf 0 0 0
+
+newmtl et4
+Kd 1 0.878431 0.113725
+Ke 0 0 0
+Ka 1 1 1
+Ks 0 0 0
+Ns 400
+Tr 0.5
+d 0.5
+Ni 1
+Tf 0 0 0
+
+newmtl gold
+Kd 0.941177 0.666667 0.156863
+Ke 0.19 0.19 0.19
+Ka 0.3 0.3 0.3
+Ks 0.6 0.6 0.6
+Ns 400
+Tr 0
+d 1
+Ni 1
+Tf 1 1 1
+map_Ka D:djes/Documents/3d/divers/Cloud7.tga
+
+newmtl machoire
+Kd 0.784314 0.784314 0.784314
+Ke 0 0 0
+Ka 0.2 0.2 0.2
+Ks 0.8 0.8 0.8
+Ns 200
+Tr 0
+d 1
+Ni 1
+Tf 1 1 1
+
+newmtl carlingue
+Kd 0.784314 0.784314 0.784314
+Ke 0 0 0
+Ka 1 1 1
+Ks 0 0 0
+Ns 400
+Tr 0
+d 1
+Ni 1
+Tf 1 1 1
+
+newmtl cockpit
+Kd 0.321569 0.568627 1
+Ke 0 0 0
+Ka 1 1 1
+Ks 0 0 0
+Ns 400
+Tr 0
+d 1
+Ni 1
+Tf 1 1 1
+
+newmtl Default
+Kd 0.784314 0.784314 0.784314
+Ke 0 0 0
+Ka 1 1 1
+Ks 0 0 0
+Ns 400
+Tr 0
+d 1
+Ni 1
+Tf 1 1 1
+
+newmtl or_batons
+Kd 0.941177 0.666667 0.156863
+Ke 0 0 0
+Ka 0.2 0.2 0.2
+Ks 0.5 0.5 0.5
+Ns 400
+Tr 0
+d 1
+Ni 1
+Tf 1 1 1
+map_Ka D:djes/Documents/3d/images/Reflections/FractalReflections.tga
+
+newmtl or_branches
+Kd 0.941177 0.666667 0.156863
+Ke 0 0 0
+Ka 0.2 0.2 0.2
+Ks 0.5 0.5 0.5
+Ns 400
+Tr 0
+d 1
+Ni 1
+Tf 1 1 1
+map_Ka D:djes/Documents/3d/images/Reflections/FractalReflections.tga
+
+newmtl or_support_batons
+Kd 0.941177 0.666667 0.156863
+Ke 0 0 0
+Ka 0.2 0.2 0.2
+Ks 0.6 0.6 0.6
+Ns 400
+Tr 0
+d 1
+Ni 1
+Tf 1 1 1
+
+newmtl or_vis
+Kd 0.941177 0.666667 0.156863
+Ke 0 0 0
+Ka 0.2 0.2 0.2
+Ks 0.5 0.5 0.5
+Ns 400
+Tr 0
+d 1
+Ni 1
+Tf 1 1 1
+map_Ka D:djes/Documents/3d/images/Reflections/FractalReflections.tga
+
+newmtl sable
+Kd 0.784314 0.360784 0
+Ke 0 0 0
+Ka 1 1 1
+Ks 0.1 0.1 0.1
+Ns 800
+Tr 0
+d 1
+Ni 1
+Tf 1 1 1
+
+newmtl verre
+Kd 0.996078 0.94902 0.866667
+Ke 0 0 0
+Ka 1.5 1.5 1.5
+Ks 1 1 1
+Ns 600
+Tr 0.8
+d 0.2
+Ni 1.1
+Tf 1 1 1
+

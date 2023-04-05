@@ -11,3 +11,9 @@ Most of the assets in this game have been made by me, but the few that havent ha
 ## PatrolTransition.wav
 - https://freesound.org/people/colorsCrimsonTears/sounds/577960/
 - CC0
+
+# 3D Models
+## Hourglass.obj
+- https://sketchfab.com/3d-models/hourglass-a003f23e71a1455b981828af76424696#download
+- CC Attributon
+- "Hourglass" (https://skfb.ly/6XNRx) by Jésahel is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).

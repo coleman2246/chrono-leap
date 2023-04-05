@@ -130,6 +130,11 @@ public class TurretEnemy : BaseEnemy
             rotState = TurretRotState.AttackEnemy;
         }
 
+        if(!inFov)
+        {
+            return;
+        }
+
         float targetError = 0.5f;
 
         if(timeSinceLastAttack  > maxAttackInterval && isAtTarget(targetError) && inFov)
