@@ -36,6 +36,8 @@ public class TurretEnemy : BaseEnemy
         anglesLookup[TurretRotState.RotatingCWX] = CWTarget;
 
         RegisterTracker(ref turretStateTracker);
+
+
     }
 
     public override void EnemyTimeStepCallback()
@@ -168,5 +170,6 @@ public class TurretEnemy : BaseEnemy
             
         }
     }
+
 
 }

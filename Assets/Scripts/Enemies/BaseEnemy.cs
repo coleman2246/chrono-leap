@@ -37,6 +37,7 @@ public class BaseEnemy : TimeEffectedObject
     [SerializeField] private float forgetTime = 5f;
     [SerializeField] protected float maxAttackInterval = .5f;
     [SerializeField] private EnemyState state = EnemyState.Patrol;
+    [SerializeField] private bool invertBullet = true;
     [SerializeField] protected Transform bulletSpawnLocation;
     [SerializeField] protected GameObject bulletPrefab;
     
@@ -320,10 +321,17 @@ public class BaseEnemy : TimeEffectedObject
 
     protected void FireBullet(Vector3 endPoint)
     {
+        float invertAngle = 0;
+
+        if(invertBullet)
+        {
+            invertAngle = 180;
+        }
+
         // need to add 180 or they spawn backwards
         GameObject bulletGameObj = Instantiate(bulletPrefab,
                 bulletSpawnLocation.position,
-                bulletSpawnLocation.rotation * Quaternion.Euler(0,180,0)
+                bulletSpawnLocation.rotation * Quaternion.Euler(0,invertAngle,0)
         );
 
 

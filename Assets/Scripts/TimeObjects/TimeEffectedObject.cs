@@ -250,6 +250,7 @@ public class TimeEffectedObject : MonoBehaviour
 
 
         ClearRigidBody(); 
+        PauseCallback();
 
     }
 

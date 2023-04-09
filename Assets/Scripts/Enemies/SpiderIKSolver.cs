@@ -91,7 +91,7 @@ public class SpiderIKSolver : MonoBehaviour
 
         Vector3 dir = (transform.position - newPos).normalized * stepDistance;
 
-        float speed = 4f;
+        float speed = 3f;
         //newPos += dir;
 
 
