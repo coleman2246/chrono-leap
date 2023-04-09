@@ -1,8 +1,8 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-
+using System.Threading.Tasks;
+using System.Collections.Generic;
 
 public enum LegTypes
 {
@@ -25,45 +25,21 @@ public class Leg
     public Transform targetTransform;
     public Transform movingParent;
 
-    public Vector3 footTarget;
-    public Vector3 prevMovingParentPos;
-
     public LegState state;
-    public float timeMoving;
-    public Vector3 directionOfMovement;
-    public Vector3 parentVel;
-    public float lerp;
-    public float targetToParentDist;
 
-    public Vector3 initialOffset;
-    public bool doneAnim;
+    public Vector3 legStuckPos;
+    public float stuckDistance;
 
 
-    public float stepHeight;
-    public float stepDistance;
-
-    public float currentAcceptableDistance;
-    public LegTypes type;
-    public float forwardLegAngle;
-    public float rightLegAngle;
-    public Vector3 extendDirForward;
-    public Vector3 extendDirRight;
-    public float speed;
-
-    public Leg(Transform moveParent, LegTypes legType, float stepHeight, float stepDistance, int isFront, int isRight, float speed)
+    public Leg(Transform moveParent)
     {
         bool hintFound = false;
         bool targetFound = false;
 
+        movingParent = moveParent;
+
         targetTransform = null;
         hintTransform = null;
-
-
-        type = legType;
-
-        stepHeight = stepHeight;
-        stepDistance = stepDistance;
-        speed = speed;
 
         foreach (Transform child in moveParent)
         {
@@ -85,44 +61,22 @@ public class Leg
                 break;
             }
         }
-
-        movingParent = moveParent;
-        footTarget = movingParent.position;
-        prevMovingParentPos = movingParent.position;
+        
         state = LegState.Maintain;
-        timeMoving = 0;
-        directionOfMovement = new Vector3(0,0,0);
-        parentVel = new Vector3(0,0,0);
-        lerp = 0;
-
-
-        initialOffset = hintTransform.position - movingParent.position;
-        targetToParentDist = 0;
-        doneAnim = false;
-        currentAcceptableDistance = stepDistance;
-        forwardLegAngle = 90;
-
-        extendDirForward = isFront * targetTransform.forward;
-        extendDirRight = isRight * targetTransform.right;
-
+        legStuckPos = GetParentFloorPos();;
+        stuckDistance = 0;
     }
 
     public void UpdateParentInfo()
     {
-        directionOfMovement = (prevMovingParentPos - movingParent.position + initialOffset).normalized;
-        parentVel = (prevMovingParentPos - movingParent.position + initialOffset)/Time.deltaTime;
+        stuckDistance = Vector3.Distance(legStuckPos,GetParentFloorPos());
+        Debug.Log(stuckDistance);
 
-        prevMovingParentPos = movingParent.position;
+    }
 
-        targetToParentDist = Vector3.Distance(GetParentFloorPos(), targetTransform.position);
-
-        forwardLegAngle = Vector3.Angle(targetTransform.position-movingParent.position, extendDirForward);
-        rightLegAngle = Vector3.Angle(targetTransform.position-movingParent.position, extendDirRight);
-            
-
-        //Debug.Log($"forwrad {type.ToString()} {forwardLegAngle}");
-        //Debug.Log($"right {type.ToString()} {rightLegAngle}");
-
+    public void MaintainAction()
+    {
+        SetFootPos(legStuckPos);
     }
 
     public void SetFootPos(Vector3 pos)
@@ -149,51 +103,25 @@ public class Leg
         return pos;
     }
 
-    public void PerformAction()
+    public async void AnimateMovement(Vector3 newPos, float time, float stepHeight)
     {
-        if(state == LegState.Maintain)
+        float lerp = 0;
+
+        while(lerp < time)
         {
-            SetFootPos(footTarget);
-        }
-        else
-        {
-            AnimateMovement(footTarget);
-
-        }
-
-        UpdateParentInfo();
-
-    }
-
-    void AnimateMovement(Vector3 newPos)
-    {
-
-        if(lerp < 1f)
-        {
-            Vector3 currentPos = Vector3.Lerp(targetTransform.position, newPos, lerp);
-            currentPos.y += Mathf.Sign(lerp * Mathf.PI) * stepHeight; 
+            Vector3 currentPos = Vector3.Lerp(targetTransform.position, newPos, 1/time * lerp);
+            currentPos.y += Mathf.Sign(1/time * lerp * Mathf.PI) * stepHeight; 
 
             SetFootPos(currentPos);
-            // basically integrating to get displacement
 
-            //float speed = parentVel.magnitude; //4 legs each should be moving at 1/4
+            lerp += Time.deltaTime;
 
-            lerp += Time.deltaTime * 6;
+            await Task.Yield();
 
-            /*
-            if(Vector3.Distance(transform.parent.position, currentPos) > stepDistance)
-            {
-                Debug.Log("exti early");
-                //break;
-            }
-            */
-
-            timeMoving += Time.deltaTime;
         }
-        else
-        {
-            doneAnim = true;
-        }
+
+        legStuckPos = newPos;
+        state = LegState.Maintain;
 
     }
 
@@ -208,117 +136,70 @@ public class SpiderLegController : MonoBehaviour
 
     [SerializeField] private float stepHeight = 0.2f;
     [SerializeField] private float stepDistance = 0.3f;
+    [SerializeField] private float stepTime = 0.3f;
 
     private Dictionary<LegTypes,Leg> legs = new Dictionary<LegTypes, Leg>();
-    private Dictionary<LegTypes,LegTypes[]> antagonistLegs = new Dictionary<LegTypes, LegTypes[]>();
-    NavMeshAgent agent;
 
 
 
     void Start()
     {
-        agent = transform.parent.GetComponent<NavMeshAgent>();
 
-        legs[LegTypes.FrontRight] = new Leg(frontRight,LegTypes.FrontRight, stepHeight, stepDistance, 1,1,agent.speed);
-        legs[LegTypes.FrontLeft] = new Leg(frontLeft,LegTypes.FrontLeft, stepHeight, stepDistance, 1,-1, agent.speed);
-        legs[LegTypes.BackRight] = new Leg(backRight,LegTypes.BackRight, stepHeight, stepDistance,-1,1, agent.speed);
-        legs[LegTypes.BackLeft] = new Leg(backLeft,LegTypes.BackLeft, stepHeight, stepDistance, -1,-1, agent.speed);
-
-        LegTypes[] frontRightAnatagonists = {LegTypes.BackRight, LegTypes.FrontLeft};
-        LegTypes[] frontLeftAnatagonists = {LegTypes.BackLeft, LegTypes.FrontRight};
-        LegTypes[] backRightAnatagonists = {LegTypes.FrontRight, LegTypes.BackLeft};
-        LegTypes[] backLeftAnatagonists = {LegTypes.FrontLeft, LegTypes.BackRight};
-
-        antagonistLegs[LegTypes.FrontRight] = frontRightAnatagonists;
-        antagonistLegs[LegTypes.FrontLeft] = frontLeftAnatagonists;
-        antagonistLegs[LegTypes.BackRight] = backRightAnatagonists;
-        antagonistLegs[LegTypes.BackLeft] = backLeftAnatagonists;
+        legs[LegTypes.FrontRight] = new Leg(frontRight);
+        legs[LegTypes.FrontLeft] = new Leg(frontLeft);
+        legs[LegTypes.BackRight] = new Leg(backRight);
+        legs[LegTypes.BackLeft] = new Leg(backLeft);
         
     }
 
 
+
+
     void Update()
     {
-        //Debug.Log(legs[LegTypes.FrontRight].parentVel);
-        //Leg currentLeg = legs[LegTypes.FrontRight];
+
+
+        // wanted to use a max heap, but not built in
+        // and dont want to implement my own
+
+        List<Leg> sortedLegs  = new List<Leg>();
+
+        bool anyMoving = false;
 
         foreach(KeyValuePair<LegTypes,Leg> kvp in legs)
         {
             Leg currentLeg = kvp.Value;
-            LegTypes key = kvp.Key;
 
-            if(key != LegTypes.BackRight && key != LegTypes.FrontRight)
+            currentLeg.UpdateParentInfo();
+
+            if(currentLeg.state == LegState.Maintain)
             {
-
-                //continue;
+                currentLeg.MaintainAction();
             }
-            
-            if(currentLeg.doneAnim)
+            else
             {
-
-                currentLeg.doneAnim = false; 
-                currentLeg.state = LegState.Maintain;
-                currentLeg.timeMoving = 0;
+                anyMoving = true;
             }
 
-
-            bool badLegAngleForward = currentLeg.forwardLegAngle < 30;
-            bool badLegAngleRight = currentLeg.rightLegAngle > 100;
-            bool tooFarAway = currentLeg.targetToParentDist > stepDistance;
-
-            //Debug.Log(currentLeg.doneAnim);
-
-            if( (tooFarAway || badLegAngleForward || badLegAngleRight) && currentLeg.state != LegState.Moving)
-            {
-                
-                bool moveLeg = true;
-
-                foreach(LegTypes antagonistLegKey in antagonistLegs[key])
-                {
-                    Leg antLeg = legs[antagonistLegKey];
-
-                    //Debug.Log(antLeg.timeMoving);
-
-                    if(antLeg.state == LegState.Moving && antLeg.lerp < 0.1)
-                    {
-                        moveLeg = false;
-                        break;
-                    }
-
-                }
-
-                if(moveLeg)
-                {
-                    currentLeg.state = LegState.Moving;
-                    currentLeg.lerp = 0;
-
-                    currentLeg.timeMoving = 0;
-                    Vector3 newFootTarget = currentLeg.GetParentFloorPos();
-
-                    newFootTarget += -currentLeg.extendDirForward *3* currentLeg.stepDistance;
-                    if(badLegAngleForward)
-                    {
-                        newFootTarget += -currentLeg.extendDirForward *30* currentLeg.stepDistance;
-                    }
-                    
-                    if(badLegAngleRight)
-                    {
-                        newFootTarget += -currentLeg.extendDirRight * 30*currentLeg.stepDistance;
-                    }
-
-                    currentLeg.footTarget =  newFootTarget;
-                }
-
-            }
-
-            
-
-            
-
-            currentLeg.PerformAction();
-
+            sortedLegs.Add(currentLeg);
         }
-                
+
+        // only want one leg moving
+        if(anyMoving)
+        {
+            return;
+        }
+        
+
+        sortedLegs.Sort((p1, p2) => p2.stuckDistance.CompareTo(p1.stuckDistance));
+
+        Leg highestPriorityLeg = sortedLegs[0];
+
+        if(highestPriorityLeg.stuckDistance > stepDistance && highestPriorityLeg.state != LegState.Moving)
+        {
+            highestPriorityLeg.AnimateMovement(highestPriorityLeg.GetParentFloorPos(), stepTime, stepHeight);
+        }
+
     }
 
 
@@ -331,10 +212,10 @@ public class SpiderLegController : MonoBehaviour
             Leg currentLeg = kvp.Value;
             LegTypes key = kvp.Key;
 
-
             Gizmos.color = Color.yellow;
-            Gizmos.DrawSphere(currentLeg.footTarget, .05f);
+            Gizmos.DrawSphere(currentLeg.legStuckPos, .1f);
         }
     }
 
 }
+
