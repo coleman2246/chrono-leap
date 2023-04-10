@@ -1,0 +1,5 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:Button text="Pick Level" display-tooltip-when-elided="true" name="PickLevel" />
+    <ui:Button text="Controls" display-tooltip-when-elided="true" name="Controls" />
+    <ui:Button text="Quit" display-tooltip-when-elided="true" name="Quit" />
+</ui:UXML>

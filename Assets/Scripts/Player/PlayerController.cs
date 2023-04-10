@@ -14,6 +14,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float timeToStop = .25f;
     [SerializeField] int maxJumpCharges = 2;
     [SerializeField] bool isOnFloor = false;
+    [SerializeField] float stepHeight = 0.3f;
+    [SerializeField] Transform lowerStep;
+    [SerializeField] Transform upperStep;
 
     int jumpChargesRemaining;
 
@@ -24,6 +27,7 @@ public class PlayerController : MonoBehaviour
     private Transform meshTransform;
     private CapsuleCollider collider;
     private Rigidbody rb;
+    private PlayerWorldInteractions playerWorld;
 
     private Vector3 negativeVel;
     private bool[] isDecel = {false,false};
@@ -33,9 +37,9 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         cam = GetComponentInChildren<Camera>();
-        Cursor.lockState = CursorLockMode.Locked;
         collider = GetComponent<CapsuleCollider>();
         rb = GetComponent<Rigidbody>();
+        playerWorld = GetComponent<PlayerWorldInteractions>();
 
         if(rb != null)
         {
@@ -48,7 +52,10 @@ public class PlayerController : MonoBehaviour
         velocityVector = new Vector3(0,0,0);
         startPos = transform.position;
 
+
         negativeVel = new Vector3(0,0,0);
+
+        upperStep.position = new Vector3(lowerStep.position.x, lowerStep.position.y + stepHeight, lowerStep.position.z);
         
 
     }
@@ -222,10 +229,100 @@ public class PlayerController : MonoBehaviour
         
     }
 
+    void HandleStep()
+    {
+        // used here https://www.youtube.com/watch?v=DrFk5Q_IwG0
+        // as starting point 
+        
+        float [] adjustmentsX = {-0.55f,0, 0.55f};
+        float [] adjustmentsZ = {-0.55f,0, 0.55f};
+        float [] anglesAdjust = {-45,0,45};
+
+        float rotationY = cam.transform.rotation.eulerAngles.y;
+
+        Vector3 rot = lowerStep.rotation.eulerAngles;
+        rot.y = rotationY;
+
+        lowerStep.rotation = Quaternion.Euler(rot);
+        upperStep.rotation = Quaternion.Euler(rot);
+        
+        for(int i = 0; i < adjustmentsX.Length; i++)
+        {
+            for(int j = 0; j < adjustmentsZ.Length; j++)
+            {
+                // only want movement in one axis
+                if(adjustmentsX[i] == adjustmentsZ[j])
+                {
+                    continue;
+                }
+
+                Vector3 adjustment = new Vector3(adjustmentsX[i], 0,adjustmentsZ[j]);
+
+                Vector3 forward = lowerStep.transform.forward; // or your vector you want to rotate
+                
+                //Vector3 forward = lowerStep.forward; // or your vector you want to rotate
+            
+                for(int k = 0; k < anglesAdjust.Length; k++)
+                {
+
+                    float angle = anglesAdjust[k];
+
+
+                    Vector3 axis = Vector3.up; // y-axis
+
+                    Quaternion rotation = Quaternion.AngleAxis(angle, axis);
+                    Vector3 rotatedAngle = rotation * forward;
+
+                    RaycastHit lowerContact;
+
+                    if(!Physics.Raycast(lowerStep.transform.position + adjustment, rotatedAngle, out lowerContact, 0.2f))
+                    {
+                        continue;
+                        // switch to continue
+                    }
+
+                    RaycastHit upperContact;
+                    if(Physics.Raycast(upperStep.transform.position + adjustment, rotatedAngle, out upperContact, 0.2f))
+                    {
+                        continue;
+                        // switch to continue
+                        //
+                    }
+
+                    rb.position -= new Vector3(0f,-stepHeight,0);
+                    return;
+                }
+
+            }
+            
+        }
+        
+
+
+
+    }
+
     void Update()
     {
+        if(playerWorld.isPaused)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            return;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+
+
         HandleJump();
         HandleMovement();
         HandleAngle();
+
+        if(isOnFloor)
+        {
+            //HandleStep();
+        }
+
     }
 }

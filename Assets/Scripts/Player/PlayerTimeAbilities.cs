@@ -16,15 +16,22 @@ public class PlayerTimeAbilities : MonoBehaviour
 
     public int remainingTimeStopCharges = 3;
     private Camera cam;
+    private PlayerWorldInteractions playerWorld;
 
     void Start()
     {
         stoppedObjects = new LinkedList<TimeEffectedObject>();
         cam = GetComponentInChildren<Camera>();
+        playerWorld = GetComponent<PlayerWorldInteractions>();
     }
 
     void Update()
     {
+        if(playerWorld.isPaused)
+        {
+            return;
+        }
+
         HandleTimePause();
         HandleTimeUnPause();
         HandleRewind();

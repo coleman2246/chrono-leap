@@ -29,6 +29,7 @@ public class Leg
 
     public Vector3 legStuckPos;
     public float stuckDistance;
+    public bool destroy;
 
 
     public Leg(Transform moveParent)
@@ -40,6 +41,7 @@ public class Leg
 
         targetTransform = null;
         hintTransform = null;
+        destroy = false;
 
         foreach (Transform child in moveParent)
         {
@@ -70,7 +72,7 @@ public class Leg
     public void UpdateParentInfo()
     {
         stuckDistance = Vector3.Distance(legStuckPos,GetParentFloorPos());
-        Debug.Log(stuckDistance);
+        //Debug.Log(stuckDistance);
 
     }
 
@@ -109,6 +111,15 @@ public class Leg
 
         while(lerp < time)
         {
+            // since this is async it need can continue 
+            // running when scene is switched and will error out
+            // need to destroy this function when OnDestroyCallback is run
+
+            if(destroy || targetTransform == null)
+            {
+                return;
+            }
+
             Vector3 currentPos = Vector3.Lerp(targetTransform.position, newPos, 1/time * lerp);
             currentPos.y += Mathf.Sign(1/time * lerp * Mathf.PI) * stepHeight; 
 
@@ -117,6 +128,7 @@ public class Leg
             lerp += Time.deltaTime;
 
             await Task.Yield();
+        
 
         }
 
@@ -214,6 +226,16 @@ public class SpiderLegController : MonoBehaviour
 
             Gizmos.color = Color.yellow;
             Gizmos.DrawSphere(currentLeg.legStuckPos, .1f);
+        }
+    }
+
+
+    void OnDestroyCallback()
+    {
+        foreach(KeyValuePair<LegTypes,Leg> kvp in legs)
+        {
+            Leg currentLeg = kvp.Value;
+            currentLeg.destroy = true;
         }
     }
 

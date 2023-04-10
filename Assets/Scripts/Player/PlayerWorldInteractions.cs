@@ -1,3 +1,4 @@
+using UnityEngine.SceneManagement;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,9 +9,6 @@ public enum PlayerHoldingItemStates
     HoldingItem,
 }
 
-
-
-
 public class PlayerWorldInteractions : MonoBehaviour
 {
  
@@ -18,6 +16,7 @@ public class PlayerWorldInteractions : MonoBehaviour
     public float interactionDistance = 3f;
     public float interactionSphereRadius = 1f;
     public bool isDead = false;
+    public bool isPaused = false;
 
 
     private Ray ray;
@@ -28,6 +27,7 @@ public class PlayerWorldInteractions : MonoBehaviour
     private GameObject itemCarrying;
     private CapsuleCollider col;
     private PlayerHoldingItemStates holdingState = PlayerHoldingItemStates.Free;
+    private PlayerUIController uiController;
 
     void Start()
     {
@@ -36,6 +36,9 @@ public class PlayerWorldInteractions : MonoBehaviour
 
         col = GetComponentInChildren<CapsuleCollider>();
         itemCarrying = null;
+
+        uiController = GetComponentInChildren<PlayerUIController>();
+
     }
 
 
@@ -143,6 +146,45 @@ public class PlayerWorldInteractions : MonoBehaviour
         interactionObject.InteractChild();
     }
 
+    void HandlePause()
+    {
+        if(!Input.GetButtonDown("Cancel"))
+        {
+            return;
+        }
+
+        if(isPaused)
+        {
+            UnPause();
+        }
+        else
+        {
+            Pause();
+        }
+        
+    }
+
+    public void UnPause()
+    {
+        uiController.UnPause();
+        Time.timeScale = 1; 
+        isPaused = false;
+    }
+
+    public void Pause()
+    {
+        uiController.Pause();
+        Time.timeScale = 0; 
+        isPaused = true;
+    }
+
+    public void GameOverMenu()
+    {
+        uiController.GameOverMenu();
+        Time.timeScale = 0; 
+        isPaused = true;
+    }
+
     void Update()
     {
 
@@ -158,6 +200,8 @@ public class PlayerWorldInteractions : MonoBehaviour
         }
 
         HandleObjectInteraction();
+
+        HandlePause();
     }
 
 
@@ -168,5 +212,20 @@ public class PlayerWorldInteractions : MonoBehaviour
         // show ui
         // restart scene
         // quit to main menu 
+    }
+
+    public void RestartLevel()
+    {
+
+        Time.timeScale = 1; 
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name, LoadSceneMode.Single);
+
+    }
+
+    public void Quit()
+    {
+        Time.timeScale = 1f;
+
+        SceneManager.LoadScene("PickLevel", LoadSceneMode.Single);
     }
 }
