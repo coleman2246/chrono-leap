@@ -9,18 +9,25 @@ public class TimeEffectableMovingPlatform : TimeEffectableMovingObject
 
         if (collision.gameObject.CompareTag("Player"))
         {
-            Rigidbody playerRb = collision.transform.GetComponent<Rigidbody>();
-            PlayerController player = collision.transform.GetComponent<PlayerController>();
-
-            if( Time.time - player.moveTime > 0.1f)
+            Vector3 collisionNormal = (collision.transform.position - transform.position).normalized;
+            Debug.Log(collisionNormal);
+            if(collisionNormal.y > .5)
             {
-                 playerRb.constraints |= RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ;
+                Rigidbody playerRb = collision.transform.GetComponent<Rigidbody>();
+                PlayerController player = collision.transform.GetComponent<PlayerController>();
 
-                playerRb.isKinematic = true;
+                if( Time.time - player.moveTime > 0.1f)
+                {
+                     playerRb.constraints |= RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ;
+
+                    playerRb.isKinematic = true;
+                }
+
+                //rb.mass = rb.mass - playerRb.mass;
+                collision.transform.SetParent(transform);
+
             }
 
-            rb.mass = rb.mass - playerRb.mass;
-            collision.transform.SetParent(transform);
         }
 
     }
@@ -34,7 +41,7 @@ public class TimeEffectableMovingPlatform : TimeEffectableMovingObject
 
             PlayerController player = collision.transform.GetComponent<PlayerController>();
             Rigidbody playerRb = collision.transform.GetComponent<Rigidbody>();
-            rb.mass = rb.mass + playerRb.mass;
+            //rb.mass = rb.mass + playerRb.mass;
             playerRb.isKinematic = false;
             playerRb.constraints = player.startingConstraints; 
         }

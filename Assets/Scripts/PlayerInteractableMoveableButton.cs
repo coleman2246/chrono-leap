@@ -2,21 +2,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerInteractableElevatorButton : PlayerInteractableObject
+public class PlayerInteractableMoveableButton : PlayerInteractableObject
 {
     public bool pressed = false;
 
-    [SerializeField] private TimeEffectableMovingObject elevatorTimeObj;
+    [SerializeField] private List<TimeEffectableMovingObject> moveableTimeObj;
 
     public void Start()
     {
-        elevatorTimeObj.activateOnTrigger = true;
-        elevatorTimeObj.oneWay = true;
+
+        foreach(TimeEffectableMovingObject obj in moveableTimeObj)
+        {
+            obj.activateOnTrigger = true;
+        }
 
     }
     
     public override void InteractChild()
     {
-        elevatorTimeObj.TriggerMovement();
+        foreach(TimeEffectableMovingObject obj in moveableTimeObj)
+        {
+            obj.TriggerMovement();
+        }
     }
 }

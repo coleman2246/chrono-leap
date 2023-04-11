@@ -63,6 +63,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pauseAsset: {fileID: 9197481963319205126, guid: a05bddb287c63b0bb8f91b01dd4871d0, type: 3}
   playerAsset: {fileID: 9197481963319205126, guid: 6d9712940919c3b59aa82001d5d1a1e7, type: 3}
+  interactTimeout: 0.1
 --- !u!1 &4212578124140257121
 GameObject:
   m_ObjectHideFlags: 0
@@ -323,7 +324,7 @@ MonoBehaviour:
   timestopRechargeTime: 3
   freezeCooldown: 1
   currentCooldown: 0
-  radius: 30
+  radius: 60
   remainingTimeStopCharges: 3
 --- !u!114 &6543005795433821017
 MonoBehaviour:

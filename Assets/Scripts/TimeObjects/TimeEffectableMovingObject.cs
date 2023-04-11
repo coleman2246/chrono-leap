@@ -25,6 +25,7 @@ public class TimeEffectableMovingObject : TimeEffectedObject
     public bool useSpeed = false;
     public float speed = 1f;
 
+    [SerializeField] private Transform endTransform; 
     [SerializeField] private Vector3 endPosition = default(Vector3); 
     [SerializeField] private float periodTime = 1f;
     [SerializeField] private float acceptableDistance = 0.1f;
@@ -88,6 +89,12 @@ public class TimeEffectableMovingObject : TimeEffectedObject
         {
             velocity = new Vector3(0,0,0);
         }
+
+        if(endTransform != null)
+        {
+            endPosition = endTransform.position;
+        }
+
 
         if(endPosition != default(Vector3))
         {

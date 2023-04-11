@@ -8,6 +8,7 @@ public class PlayerUIController : MonoBehaviour
 {
     [SerializeField] private VisualTreeAsset pauseAsset;
     [SerializeField] private VisualTreeAsset playerAsset;
+    [SerializeField] private float interactTimeout = 0.1f;
 
     PlayerTimeAbilities timeAbilities;
     PlayerWorldInteractions worldInteractions;
@@ -18,6 +19,7 @@ public class PlayerUIController : MonoBehaviour
     private ProgressBar playerObjectsFrozen;
     private Label playerChargesLabel;
     private Label playerFrozenLabel;
+    private Label interactMessageLabel;
 
 
     private Button pauseResumeButton;
@@ -27,6 +29,9 @@ public class PlayerUIController : MonoBehaviour
 
     private bool isPaused;
 
+
+    private float lastInteractMessageTime;
+    private string interactMessage;
 
     void Start()
     {
@@ -41,6 +46,12 @@ public class PlayerUIController : MonoBehaviour
 
         InitPlayerUI();
 
+    }
+
+    public void SetInteractMessage(string newMsg)
+    {
+        interactMessage = newMsg;
+        lastInteractMessageTime = Time.time;
     }
 
     void InitPauseUI()
@@ -88,6 +99,7 @@ public class PlayerUIController : MonoBehaviour
 
         playerChargesLabel = root.Q<Label>("ChargesLabel");
         playerFrozenLabel = root.Q<Label>("FrozenLabel");
+        interactMessageLabel = root.Q<Label>("InteractionLabel");
         
         playerTimeCharges.highValue = timeAbilities.maxTimeStopCharges;
         playerObjectsFrozen.highValue = timeAbilities.maxStoppedObjects;
@@ -132,6 +144,22 @@ public class PlayerUIController : MonoBehaviour
         
         playerChargesLabel.text = $"Charges : {timeAbilities.remainingTimeStopCharges}";
         playerFrozenLabel.text = $"Enemies Frozen : {timeAbilities.numberOfStoppedObjects}";
+
+
+
+        if(Time.time - lastInteractMessageTime < interactTimeout)
+        {
+
+
+            interactMessageLabel.visible = true;
+            interactMessageLabel.text = interactMessage;
+        }
+        else
+        {
+            interactMessageLabel.visible = false;
+            interactMessageLabel.text = "";
+        }
+
     }
 
     void PauseUIUpdate()

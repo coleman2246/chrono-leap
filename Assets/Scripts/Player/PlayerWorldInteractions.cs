@@ -136,7 +136,8 @@ public class PlayerWorldInteractions : MonoBehaviour
             return;
         }
 
-        Debug.Log(interactionObject.GetInteractionMessage());
+        //Debug.Log(interactionObject.GetInteractionMessage());
+        uiController.SetInteractMessage(interactionObject.GetInteractionMessage());
 
         if(!Input.GetButtonDown("Interact"))
         {

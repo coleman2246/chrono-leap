@@ -1,8 +1,9 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
     <Style src="project://database/Assets/Resources/UI/Stylesheets/PlayerUI.uss?fileID=7433441132597879392&amp;guid=a44e730fde15a2e45939d34376fe9995&amp;type=3#PlayerUI" />
-    <ui:IMGUIContainer name="Reticle" style="background-image: url(&apos;project://database/Assets/Sprites/Common/Reticle.png?fileID=2800000&amp;guid=7b12dde26bdc6ee209e080d2701a59a2&amp;type=3#Reticle&apos;); background-color: rgba(34, 34, 34, 0); height: 100%; width: 100%; -unity-background-image-tint-color: rgb(255, 255, 255);" />
+    <ui:IMGUIContainer name="Reticle" style="background-image: url(&apos;project://database/Assets/Resources/Sprites/UI/Reticle.png?fileID=2800000&amp;guid=7b12dde26bdc6ee209e080d2701a59a2&amp;type=3#Reticle&apos;); background-color: rgba(34, 34, 34, 0); height: 100%; width: 100%; -unity-background-image-tint-color: rgb(255, 255, 255);" />
     <ui:ProgressBar value="22" name="TimeCharges" class="charge-bar" style="bottom: auto; top: 95%; left: 3%; width: 20%; height: 10%; font-size: 0; -unity-background-image-tint-color: rgb(43, 7, 7); position: absolute;" />
     <ui:ProgressBar value="22" name="ObjectsFrozen" class="charge-bar" style="bottom: auto; top: 95%; left: auto; width: 20%; height: 10%; font-size: 0; -unity-background-image-tint-color: rgb(43, 7, 7); position: absolute; right: 3%;" />
     <ui:Label text="Charges Remaining: " display-tooltip-when-elided="true" name="ChargesLabel" style="left: 7%; top: 91%; position: absolute;" />
     <ui:Label text="Enemies Frozen" display-tooltip-when-elided="true" name="FrozenLabel" style="left: auto; top: 91%; position: absolute; right: 11%;" />
+    <ui:Label display-tooltip-when-elided="true" name="InteractionLabel" style="position: absolute; left: 50%; -unity-text-align: upper-center; font-size: 27px; top: 60%;" />
 </ui:UXML>

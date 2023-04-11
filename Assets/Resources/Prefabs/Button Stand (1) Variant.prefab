@@ -53,7 +53,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: d66bfe08c6e162b9886538a26af3abbd, type: 3}
       propertyPath: m_Name
-      value: Button Stand (1)
+      value: Button Stand (1) Variant
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d66bfe08c6e162b9886538a26af3abbd, type: 3}
@@ -78,3 +78,16 @@ MonoBehaviour:
   message: Press Button {0} To Interact
   hasMessage: 1
   isInteractable: 1
+--- !u!65 &8394618983797364790
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8627411042849018182}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1.6003852, z: 1.0036125}
+  m_Center: {x: 0, y: 0.5964068, z: 0.0018062592}
