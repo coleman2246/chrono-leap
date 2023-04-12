@@ -3,6 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+public enum MovementStates
+{
+    Accelerating,
+    Decelerating,
+    Stopped
+}
+
 public class PlayerController : MonoBehaviour
 {
 [SerializeField] private float maxSpeed = 4f;
@@ -30,7 +38,8 @@ public class PlayerController : MonoBehaviour
     private PlayerWorldInteractions playerWorld;
 
     private Vector3 negativeVel;
-    private bool[] isDecel = {false,false};
+    private MovementStates[] moveStates = {MovementStates.Stopped,MovementStates.Stopped};
+    private float[] velAtStart = {0,0};
     public float moveTime = 0;
     public RigidbodyConstraints startingConstraints; 
 
@@ -97,12 +106,128 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    void HandleMovement()
+
+    void HandleStopped(int direction, float movement)
     {
-        float horizontalMovement = Input.GetAxisRaw("Horizontal");
-        float verticalMovement = Input.GetAxisRaw("Vertical");
+        
+        if(movement != 0)
+        {
+            moveStates[direction] = MovementStates.Accelerating;
+
+        }
+
+
+    }
+
+    float HandleAcceleration(int direction, float inputState)
+    {
+        if(inputState == 0)
+        {
+            moveStates[direction]  = MovementStates.Decelerating;
+        }
+
+        return accel * Mathf.Sign(inputState);
+    }
+
+    float HandleDeceleration(int direction, float inputState, float velocity, int directionMove)
+    {
+
+        if(velAtStart[direction] == 0)
+        {
+            velAtStart[direction] = directionMove * velocity;
+        }
+    
+        if(inputState != 0 && directionMove == 1)
+        {
+            moveStates[direction] = MovementStates.Accelerating;
+            velAtStart[direction] = 0f;
+            
+        }
+
+        if(Mathf.Sign(directionMove) != Mathf.Sign(velAtStart[direction]))
+        {
+            moveStates[direction] = MovementStates.Stopped;
+            velAtStart[direction] = 0f;
+        }
+        
+
+        return -velAtStart[direction] / timeToStop;
+    }
+
+    void HandleMovement(int direction)
+    {
+        float inputState = 0;
+        Vector3 movementDirection;
+
+        Vector3 input = new Vector3(rb.velocity.x, 0, rb.velocity.z);
+
+        if(direction == 0)
+        {
+            inputState = Input.GetAxis("Horizontal"); 
+            movementDirection = cam.transform.right;
+        }
+        else
+        {
+            inputState = Input.GetAxis("Vertical"); 
+            movementDirection = cam.transform.forward;
+        }
+
+        if(inputState != 0)
+        {
+            inputState = Mathf.Sign(inputState);
+        }
+
+        Debug.Log(inputState);
+
+        movementDirection.y = 0;
+
+        Vector3 currentVel = Vector3.Project(input,movementDirection.normalized);
+        
+
+
+        float newAccel = 0;
+        switch (moveStates[direction])
+        {
+            case MovementStates.Accelerating:
+                newAccel = HandleAcceleration(direction,inputState);
+                break;
+            case MovementStates.Decelerating:
+                float c_d_i = Vector3.Dot(currentVel.normalized, movementDirection.normalized);
+
+                int directionMove = 1;
+
+                if(c_d_i <= 0)
+                {
+                    directionMove = -1;
+                }
+                
+                newAccel = HandleDeceleration(direction,inputState,currentVel.magnitude,directionMove);
+                break;
+            // stopping is default state
+            default:
+                HandleStopped(direction, inputState);
+                break;
+
+        }
+        
 
         
+        Vector3 clamped = Vector3.ClampMagnitude(rb.velocity + (newAccel * movementDirection.normalized * Time.deltaTime),maxSpeed);
+        clamped.y = rb.velocity.y;
+        rb.velocity = clamped;
+
+        //rb.velocity
+        //Vector3 movementDirection = (horizontalMovement * right + verticalMovement * forward).normalized;
+        /*
+        if(direction == 0)
+        {
+            rb.velocity = new Vector3(newVelocity, rb.velocity.y, rb.velocity.z);
+        }
+        else
+        {
+            rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y, newVelocity);
+        }
+
         Vector3 forward = cam.transform.forward;
         Vector3 right = cam.transform.right;
 
@@ -113,43 +238,12 @@ public class PlayerController : MonoBehaviour
         forward.Normalize();
         right.Normalize();
 
-        /*
-        if(horizontalMovement == 0 && Mathf.Abs(rb.velocity.x) > 1)
+        if(Mathf.Sign(rb.velocity.z) != verticalMovement && Mathf.Abs(rb.velocity.z) < 0.5)
         {
-            isDecel[0] = true;
-            negativeVel.x  = rb.velocity.x / timeToStop * Time.deltaTime;
-        }
-        else
-        {
-            isDecel[0] = false;
-            negativeVel.x = 0;
+
         }
 
-        if(isDecel[0])
-        {
-            Vector3 copy = rb.velocity;
-            copy.x -= negativeVel.x;
-            rb.velocity = copy;
-        }
 
-        if(verticalMovement == 0 && Mathf.Abs(rb.velocity.z) > 1)
-        {
-            isDecel[0] = true;
-            negativeVel.z  = rb.velocity.z / timeToStop * Time.deltaTime;
-        }
-        else
-        {
-            isDecel[1] = false;
-            negativeVel.z = 0;
-        }
-
-        if(isDecel[1])
-        {
-            Vector3 copy = rb.velocity;
-            copy.z -= negativeVel.z;
-            rb.velocity = copy;
-        }
-        */
 
         if(horizontalMovement == 0 && verticalMovement == 0)
         {
@@ -159,11 +253,8 @@ public class PlayerController : MonoBehaviour
 
 
 
-        Vector3 movementDirection = (horizontalMovement * right + verticalMovement * forward).normalized;
-
         Vector3 newVelocity = rb.velocity + movementDirection * accel * Time.deltaTime;
         
-
 
         if(Mathf.Abs(rb.velocity.x) > maxSpeed)
         {
@@ -175,10 +266,14 @@ public class PlayerController : MonoBehaviour
             newVelocity.z = Mathf.Sign(rb.velocity.z) * maxSpeed;
         }
 
+        Debug.Log(movementDirection);
+
 
         PrepareForMovement();
         rb.velocity =  newVelocity;
+        */
 
+        PrepareForMovement();
     }
 
     void PrepareForMovement()
@@ -316,13 +411,13 @@ public class PlayerController : MonoBehaviour
 
 
         HandleJump();
-        HandleMovement();
+        
+        HandleMovement(0);
+        HandleMovement(1);
+
         HandleAngle();
 
-        if(isOnFloor)
-        {
-            //HandleStep();
-        }
+        
 
     }
 }

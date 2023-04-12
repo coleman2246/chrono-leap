@@ -120,10 +120,12 @@ MonoBehaviour:
   rewindLength: 5
   rewindFrequency: 10
   playBackSpeed: 0.5
+  outLine: {fileID: 0}
   oneWay: 0
   activateOnTrigger: 0
-  useSpeed: 0
-  speed: 1
+  useSpeed: 1
+  speed: 12
+  endTransform: {fileID: 0}
   endPosition: {x: 0, y: 0, z: 0}
   periodTime: 1
   acceptableDistance: 0.1

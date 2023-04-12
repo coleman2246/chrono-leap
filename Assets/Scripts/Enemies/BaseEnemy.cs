@@ -37,6 +37,7 @@ public class BaseEnemy : TimeEffectedObject
     [SerializeField] private float forgetTime = 5f;
     [SerializeField] protected float maxAttackInterval = .5f;
     [SerializeField] private EnemyState state = EnemyState.Patrol;
+    [SerializeField] private float bulletSpeed = 12;
     [SerializeField] private bool invertBullet = true;
     [SerializeField] protected Transform bulletSpawnLocation;
     [SerializeField] protected GameObject bulletPrefab;
@@ -339,7 +340,7 @@ public class BaseEnemy : TimeEffectedObject
 
         timeBullet.oneWay = true;
         timeBullet.useSpeed = true;
-        timeBullet.speed = 6f;
+        timeBullet.speed = bulletSpeed;
 
         if(fireSound != null)
         {

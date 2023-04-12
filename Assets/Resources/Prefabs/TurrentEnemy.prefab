@@ -184,12 +184,15 @@ MonoBehaviour:
   rewindLength: 5
   rewindFrequency: 10
   playBackSpeed: 0.5
+  outLine: {fileID: 0}
   headTransform: {fileID: 1690144927258995665}
   fov: 50
   distance: 25
   forgetTime: 5
   maxAttackInterval: 1
   state: 0
+  bulletSpeed: 18
+  invertBullet: 1
   bulletSpawnLocation: {fileID: 8583115140056140665}
   bulletPrefab: {fileID: 5610156026807768774, guid: 347c8bb4284120d73b51ff900355d19f, type: 3}
   transStateSounds:

@@ -275,6 +275,11 @@ public class TimeEffectableMovingObject : TimeEffectedObject
 
     public void EnsureOnTrack()
     {
+        if(useSpeed)
+        {
+            return;
+        }
+
         Vector3 distanceVector = GetTargetDistance();
 
         // off track by more than 10cm
