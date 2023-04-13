@@ -113,7 +113,6 @@ public class PlayerController : MonoBehaviour
         if(movement != 0)
         {
             moveStates[direction] = MovementStates.Accelerating;
-
         }
 
 
@@ -175,9 +174,9 @@ public class PlayerController : MonoBehaviour
         if(inputState != 0)
         {
             inputState = Mathf.Sign(inputState);
+            PrepareForMovement();
         }
 
-        Debug.Log(inputState);
 
         movementDirection.y = 0;
 
@@ -273,7 +272,6 @@ public class PlayerController : MonoBehaviour
         rb.velocity =  newVelocity;
         */
 
-        PrepareForMovement();
     }
 
     void PrepareForMovement()

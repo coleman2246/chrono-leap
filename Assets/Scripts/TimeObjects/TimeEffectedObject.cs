@@ -59,9 +59,15 @@ public struct TransformData
 
         foreach(Transform child in transform)
         {
-            TransformData dataChild = children[0];
-            dataChild.CopyToTransform(child);
-            children.RemoveAt(0);
+            if(children.Count > 0)
+            {
+                TransformData dataChild = children[0];
+                dataChild.CopyToTransform(child);
+                children.RemoveAt(0);
+
+
+            }
+
         }
 
 
@@ -257,6 +263,8 @@ public class TimeEffectedObject : MonoBehaviour
     public void ClearRigidBody()
     {
 
+        return;
+
         if(rb != null)
         {
             rb.isKinematic = true;
@@ -293,6 +301,11 @@ public class TimeEffectedObject : MonoBehaviour
 
     public void Rewind()
     {
+        if(isPaused)
+        {
+            playerTime.RemoveObject(this);
+        }
+
         isPaused = true;
         RewindStartCallback();
         AnimateRewind();

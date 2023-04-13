@@ -210,9 +210,18 @@ public class PlayerWorldInteractions : MonoBehaviour
     {
         // pause game time
         Debug.Log("Player Killed");
+        //GameOverMenu();
         // show ui
         // restart scene
         // quit to main menu 
+    }
+
+    public void LevelEnd()
+    {
+        Debug.Log("Level Ended");
+        // pause level
+        // show ui
+
     }
 
     public void RestartLevel()

@@ -7,8 +7,11 @@ public class EndLevel : PlayerCollissionWrapper
 
     public override void PlayerCollision(GameObject player)
     {
+
+        PlayerWorldInteractions playInteract = player.GetComponent<PlayerWorldInteractions>();
+
         // unlock next level
         // save progress
-        // show ui asking to exit, restart, or next level
+        playInteract.LevelEnd();
     }
 }

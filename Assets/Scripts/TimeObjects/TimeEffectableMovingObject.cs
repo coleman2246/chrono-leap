@@ -30,6 +30,7 @@ public class TimeEffectableMovingObject : TimeEffectedObject
     [SerializeField] private float periodTime = 1f;
     [SerializeField] private float acceptableDistance = 0.1f;
     [SerializeField] public bool triggered = false;
+    [SerializeField] public bool dontUseRb = false;
 
     private MovingObjectState movingState = MovingObjectState.MovingToEnd;
     private LinkedList<object> platformStateTracker = new LinkedList<object>();
@@ -83,7 +84,7 @@ public class TimeEffectableMovingObject : TimeEffectedObject
     public override void PauseableStart()
     {
         RegisterTracker(ref platformStateTracker);
-        nonRigid = rb == null;
+        nonRigid = rb == null || dontUseRb;
 
         if(nonRigid)
         {
@@ -228,7 +229,7 @@ public class TimeEffectableMovingObject : TimeEffectedObject
 
     public override void PauseableFixedUpdate()
     {
-        if(rb == null)
+        if(nonRigid)
         {
 
             StepVelocity();

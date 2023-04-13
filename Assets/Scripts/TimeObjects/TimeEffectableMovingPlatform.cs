@@ -6,21 +6,33 @@ public class TimeEffectableMovingPlatform : TimeEffectableMovingObject
 {
     void OnTriggerStay(Collider collision)
     {
+        HandlePlayerCollision(collision.gameObject);
+    }
 
+    void HandlePlayerCollision(GameObject collision)
+    {
         if (collision.gameObject.CompareTag("Player"))
         {
+
             Vector3 collisionNormal = (collision.transform.position - transform.position).normalized;
-            Debug.Log(collisionNormal);
             if(collisionNormal.y > .5)
             {
                 Rigidbody playerRb = collision.transform.GetComponent<Rigidbody>();
                 PlayerController player = collision.transform.GetComponent<PlayerController>();
 
+                float diff = collision.transform.position.y - transform.position.y;
+
                 if( Time.time - player.moveTime > 0.1f)
                 {
-                     playerRb.constraints |= RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ;
 
                     playerRb.isKinematic = true;
+                    playerRb.useGravity = false;
+                }
+                else if(diff < 1)
+                {
+                    Vector3 newPos = collision.transform.position;
+                    newPos.y += 1-diff;
+                    collision.transform.position = newPos;
                 }
 
                 //rb.mass = rb.mass - playerRb.mass;
@@ -33,6 +45,25 @@ public class TimeEffectableMovingPlatform : TimeEffectableMovingObject
     }
 
 
+    void OnCollisionExit(Collision other)
+    {
+
+        if (other.gameObject.CompareTag("Player"))
+        {
+            other.transform.SetParent(null);
+
+            PlayerController player = other.transform.GetComponent<PlayerController>();
+            Rigidbody playerRb = other.transform.GetComponent<Rigidbody>();
+
+            playerRb.isKinematic = false;
+            //rb.mass = rb.mass + playerRb.mass;
+            //playerRb.isKinematic = false;
+            //playerRb.constraints = player.startingConstraints; 
+
+            playerRb.useGravity = true;
+        }
+    }
+    /*
     void OnTriggerExit(Collider collision)
     {
         if (collision.gameObject.CompareTag("Player"))
@@ -44,12 +75,20 @@ public class TimeEffectableMovingPlatform : TimeEffectableMovingObject
             //rb.mass = rb.mass + playerRb.mass;
             playerRb.isKinematic = false;
             playerRb.constraints = player.startingConstraints; 
+
+            //playerRb.useGravity = true;
         }
     }
+    */
 
     void OnCollisionEnter(Collision collision)
     {
-        TimeEffectableMovingObject other = collision.gameObject.GetComponent<TimeEffectableMovingObject>();
+        
+        HandlePlayerCollision(collision.gameObject);
+
+
+        TimeEffectableMovingPlatform other = collision.gameObject.GetComponent<TimeEffectableMovingPlatform>();
+
         Rigidbody otherRb = collision.gameObject.GetComponent<Rigidbody>();
 
 
@@ -57,18 +96,26 @@ public class TimeEffectableMovingPlatform : TimeEffectableMovingObject
         {
             return;
         }
+        
+        if(isPaused)
+        {
+            return;
+        }
+
+        if(other.isPaused)
+        {
+            InvertMovingState();
+            SetRequiredVelocity();
+        }
 
 
-         foreach (ContactPoint contact in collision.contacts)
+        foreach (ContactPoint contact in collision.contacts)
         {
 
-            Vector3 velocity = otherRb.velocity;
+            Vector3 velocity = other.GetVelocity();
             Vector3 normal = contact.normal;
 
-            Debug.Log(Vector3.Dot(velocity, normal));
 
-            // if there is a collision the angle between the
-            // normal and the 
             if (Vector3.Dot(velocity, normal) > 0)
             {
                 other.InvertMovingState();

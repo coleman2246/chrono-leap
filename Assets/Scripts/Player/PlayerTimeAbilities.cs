@@ -159,18 +159,9 @@ public class PlayerTimeAbilities : MonoBehaviour
         foreach(Collider currCollider in hitColliders)
         {
             TimeEffectedObject timeObject;
-            if(currCollider.transform.parent == null)
-            {
+            timeObject = Utils.GetComponentInParentOrSibling<TimeEffectedObject>(currCollider.gameObject);
 
-                timeObject = currCollider.transform.GetComponent<TimeEffectedObject>();
-            }
-            else
-            {
-                timeObject = currCollider.transform.parent.GetComponent<TimeEffectedObject>();
-            }
-
-
-            if(timeObject == null)
+            if(timeObject == default(TimeEffectedObject))
             {
                 continue;
             }
