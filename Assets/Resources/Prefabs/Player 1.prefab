@@ -261,7 +261,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 1
   m_Constraints: 112
-  m_CollisionDetection: 1
+  m_CollisionDetection: 3
 --- !u!136 &8149962493391314525
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -269,8 +269,8 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8149962493391314523}
-  m_Material: {fileID: 13400000, guid: 3982eee68b0d1c032864f96b366fee29, type: 2}
-  m_IsTrigger: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.5
   m_Height: 2.0438046
@@ -295,6 +295,7 @@ MonoBehaviour:
   freezeCooldown: 0.1
   currentCooldown: 0
   radius: 60
+  timeInteractionSound: {fileID: 8300000, guid: ded93aaa7da55fb198f9b9eba9a01c72, type: 3}
   remainingTimeStopCharges: 3
 --- !u!114 &8149962493391314595
 MonoBehaviour:
@@ -321,7 +322,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8149962493391314523}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 0.6934416, y: 1.5768087, z: 0.76716757}

@@ -8,7 +8,7 @@ public class PlayerInteractableMoveableButton : PlayerInteractableObject
 
     [SerializeField] private List<TimeEffectableMovingObject> moveableTimeObj;
 
-    public void Start()
+    public override void InteractStartCallback()
     {
 
         foreach(TimeEffectableMovingObject obj in moveableTimeObj)

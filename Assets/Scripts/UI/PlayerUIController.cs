@@ -25,6 +25,7 @@ public class PlayerUIController : MonoBehaviour
     private Button pauseResumeButton;
     private Button pauseRestartButton;
     private Button pauseQuitButton;
+    private Label pauseMessage;
 
 
     private bool isPaused;
@@ -61,6 +62,9 @@ public class PlayerUIController : MonoBehaviour
         pauseResumeButton = root.Q<Button>("ResumeButton");
         pauseRestartButton = root.Q<Button>("RestartButton");
         pauseQuitButton = root.Q<Button>("QuitButton");
+        pauseMessage = root.Q<Label>("PauseMessage");
+
+        pauseMessage.visible = false;
 
         pauseResumeButton.RegisterCallback<ClickEvent>( _ => PauseButtonCallback());
         pauseRestartButton.RegisterCallback<ClickEvent>( _ => RestartButtonCallback());
@@ -130,10 +134,17 @@ public class PlayerUIController : MonoBehaviour
 
     }
 
-    public void GameOverMenu()
+    public void GameOverMenu(string message)
     {
         Pause();
         pauseResumeButton.visible = false;
+
+        if(message != "")
+        {
+            pauseMessage.visible = true;
+            pauseMessage.text = message;
+
+        }
         // hide the resume button 
     }
 

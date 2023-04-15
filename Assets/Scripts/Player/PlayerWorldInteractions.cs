@@ -144,7 +144,7 @@ public class PlayerWorldInteractions : MonoBehaviour
             return;
         }
 
-        interactionObject.InteractChild();
+        interactionObject.Interact();
     }
 
     void HandlePause()
@@ -179,9 +179,9 @@ public class PlayerWorldInteractions : MonoBehaviour
         isPaused = true;
     }
 
-    public void GameOverMenu()
+    public void GameOverMenu(string msg)
     {
-        uiController.GameOverMenu();
+        uiController.GameOverMenu(msg);
         Time.timeScale = 0; 
         isPaused = true;
     }
@@ -210,7 +210,7 @@ public class PlayerWorldInteractions : MonoBehaviour
     {
         // pause game time
         Debug.Log("Player Killed");
-        //GameOverMenu();
+        //GameOverMenu("You Have Died");
         // show ui
         // restart scene
         // quit to main menu 
@@ -219,6 +219,7 @@ public class PlayerWorldInteractions : MonoBehaviour
     public void LevelEnd()
     {
         Debug.Log("Level Ended");
+        GameOverMenu("Level Beaten");
         // pause level
         // show ui
 

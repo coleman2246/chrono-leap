@@ -62,22 +62,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: d66bfe08c6e162b9886538a26af3abbd, type: 3}
   m_PrefabInstance: {fileID: 8897935784011721751}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1880776309
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8627411042849018182}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5e8dfd17f1d9df72c9165227d53d4f36, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  customMessage: 0
-  message: Press Button {0} To Interact
-  hasMessage: 1
-  isInteractable: 1
 --- !u!65 &8394618983797364790
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -91,3 +75,20 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1.6003852, z: 1.0036125}
   m_Center: {x: 0, y: 0.5964068, z: 0.0018062592}
+--- !u!114 &1880776309
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8627411042849018182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e8dfd17f1d9df72c9165227d53d4f36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  customMessage: 0
+  interactSound: {fileID: 8300000, guid: 0edb89c9b5ded8edda560e6a1c94d83f, type: 3}
+  message: Press Button {0} To Interact
+  hasMessage: 1
+  isInteractable: 1

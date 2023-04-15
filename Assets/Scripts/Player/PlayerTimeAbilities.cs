@@ -11,18 +11,21 @@ public class PlayerTimeAbilities : MonoBehaviour
     [SerializeField] private float freezeCooldown = 10f;
     [SerializeField] private float currentCooldown = 0f;
     [SerializeField] private float radius = 30f;
+    [SerializeField] private AudioClip timeInteractionSound;
 
     LinkedList<TimeEffectedObject> stoppedObjects;
 
     public int remainingTimeStopCharges = 3;
     private Camera cam;
     private PlayerWorldInteractions playerWorld;
+    private AudioSource audioSource;
 
     void Start()
     {
         stoppedObjects = new LinkedList<TimeEffectedObject>();
         cam = GetComponentInChildren<Camera>();
         playerWorld = GetComponent<PlayerWorldInteractions>();
+        audioSource = gameObject.AddComponent<AudioSource>();
     }
 
     void Update()
@@ -144,7 +147,18 @@ public class PlayerTimeAbilities : MonoBehaviour
         remainingTimeStopCharges -= 1;
 
         PauseNewObject(timeObject);
+        PlayTimeInteractionSound();
 
+    }
+
+    void PlayTimeInteractionSound()
+    {
+        if(timeInteractionSound != null)
+        {
+            audioSource.clip = timeInteractionSound;
+            audioSource.loop = false;
+            audioSource.Play();
+        }
     }
 
     void HandleRewind()
@@ -214,6 +228,7 @@ public class PlayerTimeAbilities : MonoBehaviour
         if(removed)
         {
             timeObject.UnPause();
+            PlayTimeInteractionSound();
         }
     }
 }
