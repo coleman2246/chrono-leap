@@ -220,6 +220,7 @@ public class PlayerWorldInteractions : MonoBehaviour
     {
         Debug.Log("Level Ended");
         GameOverMenu("Level Beaten");
+        ProgressManager.UnlockNextLevel(SceneManager.GetActiveScene().name);
         // pause level
         // show ui
 

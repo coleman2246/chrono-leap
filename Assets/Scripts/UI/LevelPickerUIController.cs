@@ -22,15 +22,13 @@ class LevelItem
 
         this.button = root.Q<Button>(buttonName);
 
-        Debug.Log(sceneName);
-
         if(isUnlocked)
         {
             this.button.RegisterCallback<ClickEvent>( _ => SwitchToLevel(this.sceneName));
         }
         else
         {
-            this.button.style.unityBackgroundImageTintColor = Color.red; 
+            this.button.style.unityBackgroundImageTintColor = new Color(55/255f, 55/255f, 55/255f, 0.9f);
         }
 
     }
@@ -53,8 +51,7 @@ public class LevelPickerUIController : MonoBehaviour
     private Button settingsButton;
     private Button quitButton;
 
-    // this should be read from a json
-    private Dictionary<string,bool> progressMap = new Dictionary<string,bool>();
+    private Dictionary<string,bool> progressMap; 
 
     private Dictionary<string,string> levelButtonMap = new Dictionary<string,string>()
     {
@@ -70,14 +67,20 @@ public class LevelPickerUIController : MonoBehaviour
         
         UIDocument doc = GetComponent<UIDocument>();
 
-        progressMap["MainMenu"] = true;
+        ProgressManager.UnlockLevel("MainMenu");
+        ProgressManager.UnlockLevel("Tutorial");
+
 
         foreach(KeyValuePair<string,string> kvp in levelButtonMap)
         {
             string levelName = kvp.Key;
             string buttonName = kvp.Value;
 
-            LevelItem _ = new LevelItem(buttonName, levelName, doc, true);
+            LevelItem _ = new LevelItem(buttonName, 
+                    levelName, 
+                    doc, 
+                    ProgressManager.GetProgress(levelName)
+            );
         }
     }
 

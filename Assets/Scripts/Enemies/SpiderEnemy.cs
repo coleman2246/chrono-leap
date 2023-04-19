@@ -7,7 +7,11 @@ using UnityEngine.AI;
 public class SpiderEnemy : TurretEnemy
 {
     private NavMeshAgent agent;
-    [SerializeField] private Transform target;
+    [SerializeField] private List<Transform> targets;
+    
+    private Transform targetTransform;
+    private NavMeshPath path;
+    int targetIndex = 0;
     
     public override void EnemyStartCallback()
     {
@@ -15,11 +19,13 @@ public class SpiderEnemy : TurretEnemy
         agent = GetComponent<NavMeshAgent>();
         agent.updateRotation = false;
 
+        path = new NavMeshPath();
+
+        targetTransform = targets[targetIndex];
     }
 
     public override void EnemyUpdateCallback()
     {
-        agent.SetDestination(target.position);
     }
 
     public override void PauseCallback()
@@ -39,6 +45,50 @@ public class SpiderEnemy : TurretEnemy
 
         agent.isStopped = false;
     }
+
+    public override void PatrolCallback()
+    {
+        base.PatrolCallback();
+
+        UpdateTargetPos();
+
+        agent.SetDestination(targetTransform.position);
+    }
+
+    public void UpdateTargetPos()
+    {
+
+        float distance = Vector3.Distance(targetTransform.position,transform.position);
+
+
+        //Debug.Log(!agent.CalculatePath(targetTransform.position,path));
+        //Debug.Log(targetIndex);
+        bool pathExists = agent.CalculatePath(targetTransform.position,path);
+
+        Debug.Log(!pathExists);
+        if(distance < 1f || !pathExists)
+        {
+            IncrementTarget();
+        }
+
+    }
+
+    public void IncrementTarget()
+    {
+        Debug.Log(targets.Count);
+        if(targetIndex +1 <= targets.Count)
+        {
+            targetIndex += 1;
+        }
+        else
+        {
+            targetIndex = 0;
+        }
+
+        targetTransform = targets[targetIndex];
+
+    }
+
 
 
 

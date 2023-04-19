@@ -1179,8 +1179,9 @@ MonoBehaviour:
   fov: 135
   distance: 25
   forgetTime: 5
-  maxAttackInterval: 0.5
+  maxAttackInterval: 0.31
   state: 0
+  bulletSpeed: 18
   invertBullet: 0
   bulletSpawnLocation: {fileID: 2544336420509856421}
   bulletPrefab: {fileID: 5610156026807768774, guid: 347c8bb4284120d73b51ff900355d19f, type: 3}
@@ -1198,7 +1199,7 @@ MonoBehaviour:
   angleTolerance: 2
   targetAngle: {x: 0, y: 0, z: 0}
   rotState: 0
-  target: {fileID: 0}
+  targets: []
 --- !u!54 &7232475013647872789
 Rigidbody:
   m_ObjectHideFlags: 0
