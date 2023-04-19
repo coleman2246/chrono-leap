@@ -339,7 +339,10 @@ public class TimeEffectedObject : MonoBehaviour
             if(commonTracking.Count > 2)
             {
                 CommonTracking current = (CommonTracking)commonTracking.Last.Value;
-                current.tfData.CopyToTransform(transform);
+                if(transform != null)
+                {
+                    current.tfData.CopyToTransform(transform);
+                }
                 commonTracking.RemoveLast();
             }
             else 
@@ -362,7 +365,11 @@ public class TimeEffectedObject : MonoBehaviour
         {
 
             CommonTracking current = (CommonTracking)commonTracking.Last.Value;
-            current.rbData?.CopyToRigidBody(rb);
+            if(rb != null)
+            {
+                current.rbData?.CopyToRigidBody(rb);
+            }
+
             commonTracking.RemoveLast();
         }
 

@@ -1,6 +1,8 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
-    <ui:Label display-tooltip-when-elided="true" name="PauseMessage" style="align-items: center; justify-content: center; -unity-text-align: upper-center;" />
-    <ui:Button text="Resume" display-tooltip-when-elided="true" name="ResumeButton" />
-    <ui:Button text="Restart" display-tooltip-when-elided="true" name="RestartButton" />
-    <ui:Button text="Quit" display-tooltip-when-elided="true" name="QuitButton" />
+    <ui:Label display-tooltip-when-elided="true" name="PauseMessage" style="align-items: center; justify-content: center; -unity-text-align: upper-center; font-size: 32px; color: rgb(120, 119, 119);" />
+    <ui:GroupBox style="width: 50%; left: 25%; top: 7%;">
+        <ui:Button text="Resume" display-tooltip-when-elided="true" name="ResumeButton" style="border-top-left-radius: 20px; border-bottom-left-radius: 20px; border-top-right-radius: 20px; border-bottom-right-radius: 20px; border-left-color: rgb(46, 44, 44); border-right-color: rgb(46, 44, 44); border-top-color: rgb(46, 44, 44); border-bottom-color: rgb(46, 44, 44); background-color: rgb(140, 14, 14); color: rgb(255, 255, 255);" />
+        <ui:Button text="Restart" display-tooltip-when-elided="true" name="RestartButton" style="border-top-left-radius: 20px; border-bottom-left-radius: 20px; border-top-right-radius: 20px; border-bottom-right-radius: 20px; border-left-color: rgb(46, 44, 44); border-right-color: rgb(46, 44, 44); border-top-color: rgb(46, 44, 44); border-bottom-color: rgb(46, 44, 44); background-color: rgb(140, 14, 14); color: rgb(255, 255, 255);" />
+        <ui:Button text="Quit" display-tooltip-when-elided="true" name="QuitButton" style="border-top-left-radius: 20px; border-bottom-left-radius: 20px; border-top-right-radius: 20px; border-bottom-right-radius: 20px; border-left-color: rgb(46, 44, 44); border-right-color: rgb(46, 44, 44); border-top-color: rgb(46, 44, 44); border-bottom-color: rgb(46, 44, 44); background-color: rgb(140, 14, 14); color: rgb(255, 255, 255);" />
+    </ui:GroupBox>
 </ui:UXML>

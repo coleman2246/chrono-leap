@@ -70,6 +70,7 @@ public class SpiderEnemy : TurretEnemy
 
 
         bool pathExists = true;
+
         if(agent.CalculatePath(targetTransform.position,path))
         {
             pathExists = path.status == NavMeshPathStatus.PathComplete;
@@ -78,6 +79,7 @@ public class SpiderEnemy : TurretEnemy
         {
             pathExists = false;
         }
+
 
         if(distance < 1f || !pathExists)
         {

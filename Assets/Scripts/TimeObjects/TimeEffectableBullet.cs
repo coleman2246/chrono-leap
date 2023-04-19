@@ -28,4 +28,14 @@ public class TimeEffectableBullet : TimeEffectableMovingObject
 
     }
 
+    public override void PauseCallback()
+    {
+        rb.isKinematic = true;
+    }
+
+    public override void UnPauseCallback()
+    {
+        rb.isKinematic = false;
+    }
+
 }

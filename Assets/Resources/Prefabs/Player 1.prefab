@@ -292,7 +292,7 @@ MonoBehaviour:
   numberOfStoppedObjects: 0
   maxTimeStopCharges: 3
   timestopRechargeTime: 3
-  freezeCooldown: 0.1
+  freezeCooldown: 5
   currentCooldown: 0
   radius: 60
   timeInteractionSound: {fileID: 8300000, guid: ded93aaa7da55fb198f9b9eba9a01c72, type: 3}
@@ -314,6 +314,7 @@ MonoBehaviour:
   interactionSphereRadius: 1
   isDead: 0
   isPaused: 0
+  holdingState: 0
 --- !u!65 &3411466701532897537
 BoxCollider:
   m_ObjectHideFlags: 0
