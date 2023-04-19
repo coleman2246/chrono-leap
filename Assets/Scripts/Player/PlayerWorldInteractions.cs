@@ -17,7 +17,7 @@ public class PlayerWorldInteractions : MonoBehaviour
     public float interactionSphereRadius = 1f;
     public bool isDead = false;
     public bool isPaused = false;
-
+    public PlayerHoldingItemStates holdingState = PlayerHoldingItemStates.Free;
 
     private Ray ray;
     private Rigidbody objectRb;
@@ -26,7 +26,6 @@ public class PlayerWorldInteractions : MonoBehaviour
     private Camera cam;
     private GameObject itemCarrying;
     private CapsuleCollider col;
-    private PlayerHoldingItemStates holdingState = PlayerHoldingItemStates.Free;
     private PlayerUIController uiController;
 
     void Start()
@@ -50,7 +49,8 @@ public class PlayerWorldInteractions : MonoBehaviour
         }
 
         RaycastHit hit;
-        if (Physics.Raycast(ray, out hit,pickUpDistance))
+
+        if (Physics.SphereCast(ray, interactionSphereRadius, out hit, pickUpDistance))
         {
             objectRb = hit.rigidbody;
 
@@ -194,15 +194,15 @@ public class PlayerWorldInteractions : MonoBehaviour
         if(PlayerHoldingItemStates.Free == holdingState)
         {
             HandlePickUp();
+            HandleObjectInteraction();
+            HandlePause();
+
         }
         else
         {
             HandleDrop();
         }
 
-        HandleObjectInteraction();
-
-        HandlePause();
     }
 
 
@@ -210,7 +210,7 @@ public class PlayerWorldInteractions : MonoBehaviour
     {
         // pause game time
         Debug.Log("Player Killed");
-        //GameOverMenu("You Have Died");
+        GameOverMenu("You Have Died");
         // show ui
         // restart scene
         // quit to main menu 

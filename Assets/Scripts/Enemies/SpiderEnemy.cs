@@ -50,9 +50,17 @@ public class SpiderEnemy : TurretEnemy
     {
         base.PatrolCallback();
 
+        agent.isStopped = false;
         UpdateTargetPos();
 
         agent.SetDestination(targetTransform.position);
+    }
+
+    public override void TriggeredCallback(bool inFov)
+    {
+        base.TriggeredCallback(inFov);
+        agent.isStopped = true;
+
     }
 
     public void UpdateTargetPos()
@@ -61,11 +69,16 @@ public class SpiderEnemy : TurretEnemy
         float distance = Vector3.Distance(targetTransform.position,transform.position);
 
 
-        //Debug.Log(!agent.CalculatePath(targetTransform.position,path));
-        //Debug.Log(targetIndex);
-        bool pathExists = agent.CalculatePath(targetTransform.position,path);
+        bool pathExists = true;
+        if(agent.CalculatePath(targetTransform.position,path))
+        {
+            pathExists = path.status == NavMeshPathStatus.PathComplete;
+        }
+        else
+        {
+            pathExists = false;
+        }
 
-        Debug.Log(!pathExists);
         if(distance < 1f || !pathExists)
         {
             IncrementTarget();
@@ -75,8 +88,7 @@ public class SpiderEnemy : TurretEnemy
 
     public void IncrementTarget()
     {
-        Debug.Log(targets.Count);
-        if(targetIndex +1 <= targets.Count)
+        if(targetIndex +1 <= targets.Count -1)
         {
             targetIndex += 1;
         }

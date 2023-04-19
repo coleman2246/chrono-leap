@@ -35,6 +35,11 @@ public class PlayerTimeAbilities : MonoBehaviour
             return;
         }
 
+        if(playerWorld.holdingState != PlayerHoldingItemStates.Free)
+        {
+            return;
+        }
+
         HandleTimePause();
         HandleTimeUnPause();
         HandleRewind();
