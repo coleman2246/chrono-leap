@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "com.cloudedmountain.ide.neovim": "https://github.com/coleman2246/com.coleman2246.ide.neovim.git",
     "com.unity.animation.rigging": "1.1.1",
     "com.unity.collab-proxy": "2.0.1",
     "com.unity.feature.development": "1.0.1",

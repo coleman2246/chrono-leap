@@ -1,0 +1,15 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:GroupBox style="position: absolute; left: 20%; top: 10%; width: 35%; height: auto;">
+        <ui:Label text="Forward: &#x9;  W" display-tooltip-when-elided="true" name="Label" style="font-size: 43px; color: rgb(255, 255, 255);" />
+        <ui:Label text="Backward: &#x9;  S" display-tooltip-when-elided="true" name="Label" style="font-size: 43px; color: rgb(255, 255, 255);" />
+        <ui:Label text="Left: &#x9;            A" display-tooltip-when-elided="true" name="Label" style="font-size: 43px; color: rgb(255, 255, 255);" />
+        <ui:Label text="Right: &#x9;  D" display-tooltip-when-elided="true" name="Label" style="font-size: 43px; color: rgb(255, 255, 255);" />
+        <ui:Label text="Jump: &#x9;Space" display-tooltip-when-elided="true" name="Label" style="font-size: 43px; color: rgb(255, 255, 255);" />
+        <ui:Label text="Pause Enemy: &#x9;Left Click" display-tooltip-when-elided="true" name="Label" style="font-size: 43px; color: rgb(255, 255, 255);" />
+        <ui:Label text="Unpause Enemy: &#x9;Right Click" display-tooltip-when-elided="true" name="Label" style="font-size: 43px; color: rgb(255, 255, 255);" />
+        <ui:Label text="Rewind: &#x9;R" display-tooltip-when-elided="true" name="Label" style="font-size: 43px; color: rgb(255, 255, 255);" />
+        <ui:Label text="Pause/Unpase: &#x9;Escape" display-tooltip-when-elided="true" name="Label" style="font-size: 43px; color: rgb(255, 255, 255);" />
+        <ui:Label text="Grab/Ungrab Item: &#x9;Middle Mouse Button" display-tooltip-when-elided="true" name="Label" style="font-size: 43px; color: rgb(255, 255, 255);" />
+    </ui:GroupBox>
+    <ui:Button text="Back" display-tooltip-when-elided="true" name="BackButton" style="position: absolute; left: 2%; top: 5%; width: 7%; height: 4%; color: rgb(255, 255, 255); background-color: rgb(140, 14, 14); border-top-left-radius: 7px; border-bottom-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; border-left-color: rgb(46, 44, 44); border-right-color: rgb(46, 44, 44); border-top-color: rgb(46, 44, 44); border-bottom-color: rgb(46, 44, 44); border-left-width: 2px; border-right-width: 2px; border-top-width: 2px; border-bottom-width: 2px;" />
+</ui:UXML>

@@ -5,9 +5,9 @@ You can work on this assignment alone or in a group of no more than 2 students.
 | Group Member Name          | GitHub Username    |
 | :------------------------- |:------------------:|
 | Cole Mollica | coleman2246 |
-| <first_name2> <last_name2> | <github_username2> |
 
-Trailer video URL: _________________________
+Presentation 
+Trailer video URL: https://youtu.be/73inwaDT5eg
 
 _**Note:** The commit logs will be examined to be sure that both participants participated equally on this project._
 
